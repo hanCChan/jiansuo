@@ -1,0 +1,40 @@
+terms:
+  password:
+    id_triggers: ["password", "Password"]
+    ar_expected: ["كلمة المرور", "كلمة مرور"]
+    ar_forbidden: ["الرقم السري"]
+  pin:
+    id_triggers: ["PIN", "pin"]
+    ar_expected: ["PIN", "الرقم السري", "رقم سري"]
+    ar_forbidden: ["كلمة المرور"]
+  otp:
+    id_triggers: ["OTP", "otp", "kode OTP"]
+    ar_expected: ["OTP", "رمز التحقق", "رمز التحقق لمرة واحدة"]
+    ar_forbidden: ["كلمة المرور", "الرقم السري"]
+  login:
+    id_triggers: ["login", "masuk"]
+    ar_expected: ["تسجيل الدخول", "الدخول"]
+  blocked:
+    id_triggers: ["terblokir", "blokir"]
+    ar_expected: ["محظور", "مقفل", "حظر", "إيقاف"]
+  unblock:
+    id_triggers: ["membuka blokir", "buka blokir"]
+    ar_expected: ["فك الحظر", "إلغاء الحظر", "إعادة فتح"]
+    ar_forbidden: ["حظر", "إيقاف"]
+  debit_card:
+    id_triggers: ["kartu debit", "kartu ATM"]
+    ar_expected: ["بطاقة الخصم", "بطاقة الصراف", "بطاقة ATM"]
+    ar_forbidden: ["بطاقة الائتمان"]
+  credit_card:
+    id_triggers: ["kartu kredit"]
+    ar_expected: ["بطاقة الائتمان"]
+    ar_forbidden: ["بطاقة الخصم"]
+  account:
+    id_triggers: ["rekening", "akun"]
+    ar_expected: ["الحساب", "حساب"]
+  phone:
+    id_triggers: ["nomor HP", "nomor hp", "handphone"]
+    ar_expected: ["رقم الهاتف", "الهاتف المحمول", "رقم الجوال"]
+  face_verify:
+    id_triggers: ["verifikasi wajah"]
+    ar_expected: ["التحقق من الوجه", "التحقق بالوجه"]

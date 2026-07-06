@@ -1,0 +1,14 @@
+# Source entity -> forbidden substitutions in target
+entity_confusions:
+  myBCA: ["m-BCA", "KlikBCA", "BCA Mobile"]
+  m-BCA: ["myBCA", "KlikBCA"]
+  KlikBCA: ["myBCA", "m-BCA"]
+  "BCA ID": ["BCA Mobile", "myBCA"]
+  "KlikBCA Individu": ["myBCA", "m-BCA", "KlikBCA"]
+
+term_confusions:
+  password: ["الرقم السري", "PIN"]
+  PIN: ["كلمة المرور", "password"]
+  OTP: ["كلمة المرور", "الرقم السري"]
+  "kartu debit": ["بطاقة الائتمان", "credit card"]
+  "kartu kredit": ["بطاقة الخصم", "debit card"]

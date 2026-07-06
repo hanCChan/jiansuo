@@ -1,0 +1,52 @@
+# Longer entities first when masking (order matters in code too)
+entities:
+  - KlikBCA Individu
+  - KlikBCA Corporate
+  - KlikBCA Bisnis
+  - KlikBCA
+  - BCA ID
+  - BCA Mobile
+  - BCA Prioritas
+  - myBCA Bisnis
+  - myBCA
+  - m-BCA
+  - haloBCA
+  - keyBCA
+  - Sakuku Plus
+  - Sakuku
+  - Face ID
+  - BCA
+  - ATM
+  - OTP
+  - PIN
+  - CVV
+  - QRIS
+  - VPN
+  - KTP
+  - email
+
+latin_whitelist:
+  - BCA
+  - myBCA
+  - m-BCA
+  - KlikBCA
+  - KlikBCA Individu
+  - KlikBCA Corporate
+  - KlikBCA Bisnis
+  - BCA ID
+  - BCA Mobile
+  - BCA Prioritas
+  - myBCA Bisnis
+  - haloBCA
+  - keyBCA
+  - Sakuku
+  - Sakuku Plus
+  - ATM
+  - OTP
+  - PIN
+  - CVV
+  - QRIS
+  - Face ID
+  - VPN
+  - KTP
+  - email

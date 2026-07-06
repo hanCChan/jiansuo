@@ -1,0 +1,30 @@
+actions:
+  membuka_blokir:
+    id_patterns:
+      - "membuka blokir"
+      - "buka blokir"
+    ar_expected: ["فك الحظر", "إلغاء الحظر", "إعادة فتح"]
+    ar_forbidden: ["حظر", "إيقاف", "تجميد"]
+  memblokir:
+    id_patterns:
+      - "memblokir"
+      - "terblokir"
+    ar_expected: ["حظر", "إيقاف", "مقفل", "محظور"]
+    ar_forbidden: ["فك الحظر", "إلغاء الحظر"]
+  reset_password:
+    id_patterns:
+      - "reset password"
+      - "mengatur ulang password"
+    ar_expected: ["إعادة تعيين كلمة المرور", "إعادة ضبط كلمة المرور"]
+  activate:
+    id_patterns:
+      - "mengaktifkan"
+      - "aktivasi"
+    ar_expected: ["تفعيل", "تنشيط"]
+    ar_forbidden: ["إيقاف", "تعطيل"]
+  deactivate:
+    id_patterns:
+      - "menonaktifkan"
+      - "tutup"
+    ar_expected: ["إيقاف", "إغلاق", "تعطيل"]
+    ar_forbidden: ["تفعيل", "تنشيط"]

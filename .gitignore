@@ -1,0 +1,22 @@
+# Large model weights (download locally)
+model/
+
+# Pipeline runtime outputs
+translate/output/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets
+.env
+*.token

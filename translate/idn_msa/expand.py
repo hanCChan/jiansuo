@@ -62,7 +62,24 @@ def expand_record(record: dict[str, Any], group_idx: int) -> list[TranslationIte
     return items
 
 
-def assemble_group_output(group_id: str, items: list[TranslationItem]) -> dict[str, Any]:
+def assemble_group_output_simple(items: list[TranslationItem]) -> dict[str, Any]:
+    query_item = next(i for i in items if i.role == "query")
+    positives = sorted(
+        [i for i in items if i.role == "positive"],
+        key=lambda x: x.candidate_index,
+    )
+    negatives = sorted(
+        [i for i in items if i.role == "negative"],
+        key=lambda x: x.candidate_index,
+    )
+    return {
+        "query": query_item.msa_raw,
+        "positive": [p.msa_raw for p in positives],
+        "negative": [n.msa_raw for n in negatives],
+    }
+
+
+def assemble_group_output_debug(group_id: str, items: list[TranslationItem]) -> dict[str, Any]:
     query_item = next(i for i in items if i.role == "query")
     positives = [i for i in items if i.role == "positive"]
     negatives = [i for i in items if i.role == "negative"]

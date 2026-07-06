@@ -5,13 +5,12 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from .config_loader import PipelineConfig, load_config
-from .expand import TranslationItem, assemble_group_output, expand_record
-from .hard_qa import apply_postprocess, check_structure, hard_qa_item
+from .config_loader import PipelineConfig
+from .expand import TranslationItem, assemble_group_output_debug, assemble_group_output_simple, expand_record
+from .hard_qa import check_structure
 from .kimi_client import KimiClient
 from .mask import annotate_item
 from .pipeline import process_items_with_retry
-from .semantic_qa import judge_relation
 
 logger = logging.getLogger(__name__)
 
@@ -78,14 +77,32 @@ def run_group(
         relation_sample_limit=relation_sample_limit,
     )
 
-    return assemble_group_output(items[0].group_id, items)
+    group_id = items[0].group_id
+    debug = assemble_group_output_debug(group_id, items)
+    simple = assemble_group_output_simple(items)
+    return {
+        "query_id": group_id,
+        "group_index": group_idx,
+        "simple": simple,
+        "debug": debug,
+        "eval_ready": not debug["qa"]["failed_items"],
+    }
 
 
-def write_qa_report(groups: list[dict[str, Any]], report_path: Path) -> None:
+def write_msa_eval_json(simple_records: list[dict[str, Any]], output_path: Path) -> None:
+    output_path.write_text(
+        json.dumps(simple_records, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
+def write_qa_report(debug_records: list[dict[str, Any]], report_path: Path) -> None:
+    groups = [record["debug"] for record in debug_records]
     summary = {
         "total_groups": len(groups),
         "accepted_groups": sum(1 for g in groups if not g["qa"]["failed_items"]),
         "failed_groups": sum(1 for g in groups if g["qa"]["failed_items"]),
+        "eval_ready_groups": sum(1 for record in debug_records if record.get("eval_ready")),
         "groups": [
             {
                 "query_id": group["query_id"],
@@ -94,6 +111,7 @@ def write_qa_report(groups: list[dict[str, Any]], report_path: Path) -> None:
                 "relation_preserved": group["qa"]["relation_preserved"],
                 "failed_items": group["qa"]["failed_items"],
                 "repair_rounds": group["qa"]["repair_rounds"],
+                "eval_ready": not group["qa"]["failed_items"],
             }
             for group in groups
         ],

@@ -12,12 +12,15 @@ sys.path.insert(0, str(ROOT))
 
 from idn_msa.config_loader import load_config
 from idn_msa.kimi_client import KimiClient
-from idn_msa.runner import run_group, write_qa_report
+from idn_msa.runner import run_group, write_msa_eval_json, write_qa_report
 
 DEFAULT_INPUT = Path("/data1/hcc/jiansuo/shuju/cluster_retrieval_intent_eval.json")
 DEFAULT_OUTPUT_DIR = Path("/data1/hcc/jiansuo/translate/output")
 DEFAULT_BASE_URL = "http://10.16.137.2:8000/v1"
 DEFAULT_MODEL = "Kimi-K2.6-CT-FP8KV"
+MSA_EVAL_NAME = "cluster_retrieval_intent_eval_msa.json"
+MSA_DEBUG_NAME = "cluster_retrieval_intent_eval_msa_debug.jsonl"
+QA_REPORT_NAME = "qa_report.json"
 
 
 def parse_args() -> argparse.Namespace:
@@ -46,6 +49,23 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def load_debug_records(debug_path: Path) -> list[dict]:
+    if not debug_path.exists():
+        return []
+    records: list[dict] = []
+    with debug_path.open(encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                records.append(json.loads(line))
+    return records
+
+
+def rebuild_outputs(debug_records: list[dict], output_dir: Path) -> None:
+    simple_records = [record["simple"] for record in debug_records if record.get("eval_ready")]
+    write_msa_eval_json(simple_records, output_dir / MSA_EVAL_NAME)
+    write_qa_report(debug_records, output_dir / QA_REPORT_NAME)
+
+
 def main() -> None:
     args = parse_args()
     logging.basicConfig(
@@ -54,8 +74,9 @@ def main() -> None:
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    output_jsonl = args.output_dir / "msa_translated.jsonl"
-    qa_report = args.output_dir / "qa_report.json"
+    msa_eval_path = args.output_dir / MSA_EVAL_NAME
+    debug_jsonl_path = args.output_dir / MSA_DEBUG_NAME
+    qa_report_path = args.output_dir / QA_REPORT_NAME
 
     with args.input.open(encoding="utf-8") as f:
         records = json.load(f)
@@ -67,24 +88,13 @@ def main() -> None:
         model=args.model,
     )
 
-    done_ids: set[str] = set()
-    if args.resume and output_jsonl.exists():
-        with output_jsonl.open(encoding="utf-8") as f:
-            for line in f:
-                if line.strip():
-                    row = json.loads(line)
-                    done_ids.add(row["query_id"])
+    debug_records = load_debug_records(debug_jsonl_path) if args.resume else []
+    done_ids = {record["query_id"] for record in debug_records}
 
     end_index = min(args.start_index + args.max_groups, len(records))
     selected = records[args.start_index:end_index]
 
-    groups_out: list[dict] = []
-    if args.resume and qa_report.exists():
-        with qa_report.open(encoding="utf-8") as f:
-            old = json.load(f)
-            groups_out = old.get("groups", [])
-
-    with output_jsonl.open("a", encoding="utf-8") as out_f:
+    with debug_jsonl_path.open("a", encoding="utf-8") as debug_f:
         for offset, record in enumerate(selected):
             group_idx = args.start_index + offset + 1
             group_id = f"q_{group_idx:06d}"
@@ -93,7 +103,7 @@ def main() -> None:
                 continue
 
             logging.info("Processing group %s", group_id)
-            group_result = run_group(
+            result = run_group(
                 client=client,
                 record=record,
                 group_idx=group_idx,
@@ -104,13 +114,25 @@ def main() -> None:
                 enable_backtranslation=args.enable_backtranslation,
                 relation_sample_limit=args.relation_sample_limit,
             )
-            out_f.write(json.dumps(group_result, ensure_ascii=False) + "\n")
-            out_f.flush()
-            groups_out = [g for g in groups_out if g.get("query_id") != group_result["query_id"]]
-            groups_out.append(group_result)
-            write_qa_report(groups_out, qa_report)
+            debug_records = [r for r in debug_records if r["query_id"] != result["query_id"]]
+            debug_records.append(result)
+            debug_f.write(json.dumps(result, ensure_ascii=False) + "\n")
+            debug_f.flush()
+            rebuild_outputs(debug_records, args.output_dir)
 
-    logging.info("Done. Output: %s", output_jsonl)
+            if result["eval_ready"]:
+                logging.info("Group %s accepted for eval output", group_id)
+            else:
+                logging.warning(
+                    "Group %s failed QA; kept in debug only: %s",
+                    group_id,
+                    result["debug"]["qa"]["failed_items"],
+                )
+
+    logging.info("Done.")
+    logging.info("MSA eval: %s", msa_eval_path)
+    logging.info("Debug: %s", debug_jsonl_path)
+    logging.info("QA report: %s", qa_report_path)
 
 
 if __name__ == "__main__":

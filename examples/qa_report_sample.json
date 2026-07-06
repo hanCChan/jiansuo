@@ -1,0 +1,26 @@
+{
+  "total_groups": 2,
+  "accepted_groups": 2,
+  "failed_groups": 0,
+  "eval_ready_groups": 2,
+  "groups": [
+    {
+      "query_id": "q_000001",
+      "hard_pass": true,
+      "semantic_pass": true,
+      "relation_preserved": true,
+      "failed_items": [],
+      "repair_rounds": 0,
+      "eval_ready": true
+    },
+    {
+      "query_id": "q_000002",
+      "hard_pass": true,
+      "semantic_pass": true,
+      "relation_preserved": true,
+      "failed_items": [],
+      "repair_rounds": 1,
+      "eval_ready": true
+    }
+  ]
+}

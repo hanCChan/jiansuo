@@ -19,8 +19,8 @@ terms:
     ar_expected: ["محظور", "مقفل", "حظر", "إيقاف"]
   unblock:
     id_triggers: ["membuka blokir", "buka blokir"]
-    ar_expected: ["فك الحظر", "إلغاء الحظر", "إعادة فتح"]
-    ar_forbidden: ["حظر", "إيقاف"]
+    ar_expected: ["فك الحظر", "فك حظر", "إلغاء الحظر", "إعادة فتح"]
+    ar_forbidden: []
   debit_card:
     id_triggers: ["kartu debit", "kartu ATM"]
     ar_expected: ["بطاقة الخصم", "بطاقة الصراف", "بطاقة ATM"]

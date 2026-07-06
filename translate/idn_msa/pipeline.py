@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+import logging
+from collections import Counter
+
 from .expand import TranslationItem
 from .hard_qa import apply_postprocess, hard_qa_item
 from .kimi_client import KimiClient
 from .semantic_qa import backtranslate, judge_meaning, judge_relation
-from .translate import repair_single, translate_batch
+from .translate import repair_batch, translate_batch
 from .config_loader import PipelineConfig
+from .translation_cache import TranslationCache
 
 MAX_RETRY_ROUNDS = 3
+logger = logging.getLogger(__name__)
 
 
 def _merge_qa(item: TranslationItem, cfg: PipelineConfig) -> None:
@@ -15,17 +20,58 @@ def _merge_qa(item: TranslationItem, cfg: PipelineConfig) -> None:
     item.qa.update(hard_qa_item(item, cfg))
 
 
+def _apply_cache(items: list[TranslationItem], cache: TranslationCache | None) -> int:
+    if not cache:
+        return 0
+    hits = 0
+    for item in items:
+        cached = cache.get(item.source_idn)
+        if cached:
+            item.msa_raw = cached
+            hits += 1
+    return hits
+
+
+def _update_cache(items: list[TranslationItem], cache: TranslationCache | None) -> None:
+    if not cache:
+        return
+    for item in items:
+        if item.final_status == "accepted" and item.msa_raw:
+            cache.set(item.source_idn, item.msa_raw)
+
+
+def _log_qa_round(round_idx: int, items: list[TranslationItem], failed: list[TranslationItem]) -> None:
+    err_ctr: Counter[str] = Counter()
+    for item in failed:
+        for err in item.qa.get("hard_errors", []):
+            err_ctr[err.split(":")[0]] += 1
+    top = ", ".join(f"{k}={v}" for k, v in err_ctr.most_common(5))
+    logger.info(
+        "QA round %s: accepted=%s failed=%s total=%s top_errors=[%s]",
+        round_idx + 1,
+        len(items) - len(failed),
+        len(failed),
+        len(items),
+        top or "none",
+    )
+
+
 def process_items_with_retry(
     client: KimiClient,
     items: list[TranslationItem],
     cfg: PipelineConfig,
     batch_size: int,
+    concurrency: int,
     enable_semantic_qa: bool,
     enable_relation_qa: bool,
     enable_backtranslation: bool,
+    cache: TranslationCache | None = None,
     relation_sample_limit: int = 20,
 ) -> None:
     untranslated = list(items)
+    cache_hits = _apply_cache(untranslated, cache)
+    if cache_hits:
+        logger.info("Translation cache hits: %s/%s", cache_hits, len(untranslated))
 
     for round_idx in range(MAX_RETRY_ROUNDS):
         if not untranslated:
@@ -38,13 +84,20 @@ def process_items_with_retry(
                 "Do not rewrite positive/negative intent. Preserve entities and terms."
             )
 
-        translate_batch(
-            client,
-            untranslated,
-            cfg,
-            batch_size=batch_size,
-            repair_hint=repair_hint,
+        need_translate = (
+            [item for item in untranslated if not item.msa_raw]
+            if round_idx == 0
+            else list(untranslated)
         )
+        if need_translate:
+            translate_batch(
+                client,
+                need_translate,
+                cfg,
+                batch_size=batch_size,
+                concurrency=concurrency,
+                repair_hint=repair_hint,
+            )
 
         failed: list[TranslationItem] = []
         for item in untranslated:
@@ -64,13 +117,18 @@ def process_items_with_retry(
 
             if hard_ok and semantic_ok:
                 item.final_status = "accepted"
+                if cache:
+                    cache.set(item.source_idn, item.msa_raw)
             else:
                 item.final_status = "pending"
                 failed.append(item)
 
+        _log_qa_round(round_idx, untranslated, failed)
+
         if not failed:
             break
 
+        error_by_id = {}
         for item in failed:
             errors = (
                 item.qa.get("hard_errors", [])
@@ -78,14 +136,12 @@ def process_items_with_retry(
                 + item.qa.get("entity_errors", [])
                 + item.qa.get("term_errors", [])
             )
-            repair_single(
-                client,
-                item,
-                cfg,
-                "; ".join(map(str, errors)) or "semantic QA failed",
-            )
+            error_by_id[item.item_id] = "; ".join(map(str, errors)) or "semantic QA failed"
 
+        repair_batch(client, failed, cfg, error_by_id, concurrency=concurrency)
         untranslated = failed
+
+    _update_cache(items, cache)
 
     query_item = next(i for i in items if i.role == "query")
     if enable_relation_qa:

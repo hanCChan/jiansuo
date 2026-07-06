@@ -24,6 +24,9 @@ entities:
   - VPN
   - KTP
   - email
+  - A Card Flazz
+  - Flazz Bikers
+  - ATS Online
 
 latin_whitelist:
   - BCA
@@ -50,3 +53,19 @@ latin_whitelist:
   - VPN
   - KTP
   - email
+  - A Card
+  - A Card Flazz
+  - Flazz
+  - Flazz Bikers
+  - ATS
+  - ATS Online
+  - Online
+  - Card
+  - Bisnis
+  - Individu
+  - Corporate
+  - Mobile
+  - Prioritas
+  - Plus
+  - Switching
+  - e-Banking

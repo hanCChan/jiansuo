@@ -3,7 +3,7 @@ actions:
     id_patterns:
       - "membuka blokir"
       - "buka blokir"
-    ar_expected: ["فك الحظر", "إلغاء الحظر", "إعادة فتح"]
+    ar_expected: ["فك الحظر", "فك حظر", "إلغاء الحظر", "إعادة فتح"]
     ar_forbidden: ["حظر", "إيقاف", "تجميد"]
   memblokir:
     id_patterns:

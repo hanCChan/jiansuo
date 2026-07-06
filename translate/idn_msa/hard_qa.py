@@ -20,11 +20,43 @@ def _latin_tokens(text: str) -> list[str]:
     return LATIN_RE.findall(text)
 
 
-def _arabic_ratio(text: str) -> float:
+def _is_whitelisted_latin(token: str, cfg: PipelineConfig) -> bool:
+    low = token.lower()
+    whitelist = {w.lower() for w in cfg.latin_whitelist}
+    allowed_fragments = {"face", "id", "plus", "bisnis", "individu", "corporate", "online", "card"}
+    if low in whitelist or low in allowed_fragments:
+        return True
+    return any(low in w.lower() or w.lower() in low for w in cfg.latin_whitelist)
+
+
+def _arabic_ratio(text: str, cfg: PipelineConfig) -> float:
     if not text:
         return 0.0
     arabic_chars = len(ARABIC_RE.findall(text))
-    return arabic_chars / max(len(text), 1)
+    # Exclude whitelisted Latin product tokens from denominator.
+    non_arabic = "".join(ch for ch in text if not ARABIC_RE.match(ch))
+    latin_tokens = _latin_tokens(non_arabic)
+    whitelisted_latin_chars = sum(len(tok) for tok in latin_tokens if _is_whitelisted_latin(tok, cfg))
+    denom = max(len(text) - whitelisted_latin_chars, 1)
+    return arabic_chars / denom
+
+
+def _contains_forbidden_phrase(text: str, forbidden: str) -> bool:
+    """Match forbidden action words without substring false positives."""
+    if forbidden not in text:
+        return False
+    if " " in forbidden:
+        return forbidden in text
+    # Single-token forbidden must not match inside a longer expected phrase.
+    expected_phrases = ["فك الحظر", "فك حظر", "إلغاء الحظر", "إعادة فتح"]
+    for phrase in expected_phrases:
+        if forbidden in phrase and phrase in text:
+            return False
+    if forbidden in ("حظر", "إيقاف", "تجميد"):
+        for marker in ("فك", "إلغاء", "إعادة"):
+            if marker in text and forbidden in text:
+                return False
+    return True
 
 
 def check_structure(items: list[TranslationItem], expected_counts: dict[str, int]) -> list[str]:
@@ -55,19 +87,15 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
     if CJK_RE.search(text):
         errors.append("cjk_characters_found")
 
-    ratio = _arabic_ratio(text)
+    ratio = _arabic_ratio(text, cfg)
     if ratio < 0.55:
         errors.append(f"arabic_ratio_too_low:{ratio:.3f}")
 
-    whitelist = {w.lower() for w in cfg.latin_whitelist}
     residue = {w.lower() for w in cfg.residue_words}
-    allowed_fragments = {"face", "id", "plus", "bisnis", "individu", "corporate"}
     for token in _latin_tokens(text):
+        if _is_whitelisted_latin(token, cfg):
+            continue
         low = token.lower()
-        if low in whitelist or low in allowed_fragments:
-            continue
-        if any(low in w.lower() or w.lower() in low for w in cfg.latin_whitelist):
-            continue
         if low in residue:
             errors.append(f"indonesian_residue:{token}")
         else:
@@ -78,11 +106,17 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
             errors.append(f"missing_entity:{entity}")
 
     entity_conf = cfg.confusions.get("entity_confusions", {})
+    source_entities = set(item.entities_found)
     for src_entity, forbidden_list in entity_conf.items():
-        if src_entity in item.entities_found:
-            for forbidden in forbidden_list:
-                if forbidden in text and forbidden != src_entity:
-                    errors.append(f"entity_drift:{src_entity}->{forbidden}")
+        if src_entity not in source_entities:
+            continue
+        for forbidden in forbidden_list:
+            if forbidden == src_entity or forbidden not in text:
+                continue
+            # Allow co-occurrence when source also mentions the forbidden entity.
+            if forbidden in source_entities or forbidden in item.source_idn:
+                continue
+            errors.append(f"entity_drift:{src_entity}->{forbidden}")
 
     lower_src = item.source_idn.lower()
     lower_tgt = text.lower()
@@ -94,7 +128,7 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
         forbidden = [f.lower() for f in spec.get("ar_forbidden", [])]
         if expected and not any(e in lower_tgt for e in expected):
             warnings.append(f"term_missing:{term_name}")
-        if any(f in lower_tgt for f in forbidden):
+        if any(_contains_forbidden_phrase(lower_tgt, f) for f in forbidden):
             errors.append(f"term_confusion:{term_name}")
 
     for action_name, spec in cfg.action_polarity.get("actions", {}).items():
@@ -104,7 +138,7 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
         forbidden = [f.lower() for f in spec.get("ar_forbidden", [])]
         if expected and not any(e in lower_tgt for e in expected):
             warnings.append(f"action_missing:{action_name}")
-        if forbidden and any(f in lower_tgt for f in forbidden):
+        if forbidden and any(_contains_forbidden_phrase(lower_tgt, f) for f in forbidden):
             errors.append(f"action_polarity_error:{action_name}")
 
     src_len = max(len(item.source_idn), 1)

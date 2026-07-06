@@ -66,13 +66,33 @@ group 级通过率、失败项、重试轮次。样例见：`examples/qa_report_
 
 > **原则**：复杂 QA 信息不进入 embedding 评估主输入。
 
+## 第 1 组试运行结论（2026-07-06）
+
+详见 [`translate/docs/GROUP1_RUN_ANALYSIS.md`](translate/docs/GROUP1_RUN_ANALYSIS.md)。
+
+- 进程跑完约 2 小时，**主输出为空**（2162/4956 条 QA 失败，`eval_ready=False`）
+- 全库仅 **4992 条唯一印尼语句**（97.3% 跨组重复），应使用 `--cache translation_cache.jsonl` 做全局去重补翻
+- 主要失败：`latin_leakage`、过严 `arabic_ratio`、`entity_drift` / `action_polarity` 误杀（已在代码中修复）
+
+从 debug 导出 partial 结果：
+
+```bash
+python3 translate/scripts/export_partial_from_debug.py \
+  --debug translate/output/cluster_retrieval_intent_eval_msa_debug.jsonl \
+  --output translate/output/cluster_retrieval_intent_eval_msa_partial.json \
+  --cache-out translate/output/translation_cache.jsonl
+```
+
 ## 运行命令
 
 ```bash
 cd translate
 
 # 冒烟测试：先跑 1 个 query group
-python3 run_pipeline.py --max-groups 1 --batch-size 20
+python3 run_pipeline.py --max-groups 1 --batch-size 40 --concurrency 8
+
+# 续跑后续组（复用全局 cache，每组 mostly 只补翻 query）
+python3 run_pipeline.py --start-index 1 --max-groups 36 --resume
 
 # 正式跑全量（37 组）
 python3 run_pipeline.py --start-index 0 --max-groups 37 --batch-size 20

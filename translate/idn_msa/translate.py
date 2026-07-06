@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import json
+import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Iterable
 
 from .expand import TranslationItem
 from .kimi_client import KimiClient
 from .mask import restore_text
 from .config_loader import PipelineConfig
+
+logger = logging.getLogger(__name__)
 
 TRANSLATE_SYSTEM_PROMPT = """你是专业的金融客服语料翻译器。任务是将印尼语银行客服 query/candidate 翻译为现代标准阿拉伯语 MSA。
 
@@ -33,6 +37,7 @@ TRANSLATE_SYSTEM_PROMPT = """你是专业的金融客服语料翻译器。任务
    - PIN → الرقم السري (PIN)
 9. 不要把 myBCA、m-BCA、KlikBCA、BCA ID 互相替换。
 10. 不要把 password 翻成 PIN，也不要把 PIN 翻成 password。
+11. 如需思考，请在内部完成；最终回复只能是 JSON，不要输出思考过程。
 
 输出 JSON 格式：
 {
@@ -54,6 +59,7 @@ REPAIR_SYSTEM_PROMPT = """你是金融客服语料翻译修复器。请根据错
 2. 不要 Markdown，不要解释
 3. 保留 <ENT_...> 占位符直到后续 restore
 4. 独立忠实翻译，不根据 query 或 label 改写
+5. 最终回复只能是 JSON
 """
 
 
@@ -62,38 +68,89 @@ def _chunked(items: list[TranslationItem], batch_size: int) -> Iterable[list[Tra
         yield items[i : i + batch_size]
 
 
+def _translate_one_batch(
+    client: KimiClient,
+    batch: list[TranslationItem],
+    cfg: PipelineConfig,
+    repair_hint: str | None,
+    batch_idx: int,
+) -> None:
+    payload = [
+        {
+            "item_id": item.item_id,
+            "group_id": item.group_id,
+            "role": item.role,
+            "source_idn_masked": item.masked_idn,
+        }
+        for item in batch
+    ]
+    user_prompt = json.dumps(
+        {
+            "task": "translate_idn_to_msa",
+            "repair_hint": repair_hint,
+            "items": payload,
+        },
+        ensure_ascii=False,
+    )
+    logger.info("Translating batch %s (%s items)", batch_idx, len(batch))
+    result = client.chat_json(TRANSLATE_SYSTEM_PROMPT, user_prompt)
+    translations = {row["item_id"]: row["translation_msa"] for row in result.get("items", [])}
+    for item in batch:
+        if item.item_id not in translations:
+            raise KeyError(f"missing translation for {item.item_id}")
+        item.msa_raw = restore_text(translations[item.item_id], cfg)
+
+
 def translate_batch(
     client: KimiClient,
     items: list[TranslationItem],
     cfg: PipelineConfig,
     batch_size: int = 20,
+    concurrency: int = 1,
     repair_hint: str | None = None,
 ) -> None:
-    for batch in _chunked(items, batch_size):
-        payload = [
-            {
-                "item_id": item.item_id,
-                "group_id": item.group_id,
-                "role": item.role,
-                "source_idn_masked": item.masked_idn,
-            }
-            for item in batch
+    batches = list(_chunked(items, batch_size))
+    if concurrency <= 1 or len(batches) <= 1:
+        for idx, batch in enumerate(batches, start=1):
+            _translate_one_batch(client, batch, cfg, repair_hint, idx)
+        return
+
+    workers = min(concurrency, len(batches))
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {
+            executor.submit(_translate_one_batch, client, batch, cfg, repair_hint, idx): idx
+            for idx, batch in enumerate(batches, start=1)
+        }
+        for future in as_completed(futures):
+            future.result()
+
+
+def repair_batch(
+    client: KimiClient,
+    items: list[TranslationItem],
+    cfg: PipelineConfig,
+    error_by_id: dict[str, str],
+    concurrency: int = 8,
+) -> None:
+    if concurrency <= 1 or len(items) <= 1:
+        for item in items:
+            repair_single(client, item, cfg, error_by_id.get(item.item_id, "semantic QA failed"))
+        return
+
+    workers = min(concurrency, len(items))
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = [
+            executor.submit(
+                repair_single,
+                client,
+                item,
+                cfg,
+                error_by_id.get(item.item_id, "semantic QA failed"),
+            )
+            for item in items
         ]
-        user_prompt = json.dumps(
-            {
-                "task": "translate_idn_to_msa",
-                "repair_hint": repair_hint,
-                "items": payload,
-            },
-            ensure_ascii=False,
-        )
-        result = client.chat_json(TRANSLATE_SYSTEM_PROMPT, user_prompt)
-        translations = {row["item_id"]: row["translation_msa"] for row in result.get("items", [])}
-        for item in batch:
-            if item.item_id not in translations:
-                raise KeyError(f"missing translation for {item.item_id}")
-            restored = restore_text(translations[item.item_id], cfg)
-            item.msa_raw = restored
+        for future in as_completed(futures):
+            future.result()
 
 
 def repair_single(

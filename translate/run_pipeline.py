@@ -13,9 +13,11 @@ sys.path.insert(0, str(ROOT))
 from idn_msa.config_loader import load_config
 from idn_msa.kimi_client import KimiClient
 from idn_msa.runner import run_group, write_msa_eval_json, write_qa_report
+from idn_msa.translation_cache import TranslationCache
 
 DEFAULT_INPUT = Path("/data1/hcc/jiansuo/shuju/cluster_retrieval_intent_eval.json")
 DEFAULT_OUTPUT_DIR = Path("/data1/hcc/jiansuo/translate/output")
+DEFAULT_CACHE = DEFAULT_OUTPUT_DIR / "translation_cache.jsonl"
 DEFAULT_BASE_URL = "http://10.16.137.2:8000/v1"
 DEFAULT_MODEL = "Kimi-K2.6-CT-FP8KV"
 MSA_EVAL_NAME = "cluster_retrieval_intent_eval_msa.json"
@@ -32,7 +34,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--api-key", default="EMPTY")
     parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--batch-size", type=int, default=20)
+    parser.add_argument("--batch-size", type=int, default=40)
+    parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=8,
+        help="Parallel Kimi requests per group (one batch per request)",
+    )
+    parser.add_argument(
+        "--enable-thinking",
+        action="store_true",
+        help="Enable Kimi thinking via chat_template_kwargs.enable_thinking",
+    )
     parser.add_argument("--start-index", type=int, default=0)
     parser.add_argument("--max-groups", type=int, default=1, help="Number of query groups to process")
     parser.add_argument("--enable-semantic-qa", action="store_true")
@@ -45,6 +58,12 @@ def parse_args() -> argparse.Namespace:
         help="Only run relation QA on first N candidates per group (0 = all)",
     )
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--cache",
+        type=Path,
+        default=DEFAULT_CACHE,
+        help="Global IDN->MSA cache jsonl (dedup across groups)",
+    )
     parser.add_argument("--log-level", default="INFO")
     return parser.parse_args()
 
@@ -82,10 +101,14 @@ def main() -> None:
         records = json.load(f)
 
     cfg = load_config()
+    cache = TranslationCache(args.cache)
+    if cache:
+        logging.info("Loaded translation cache entries: %s", len(cache))
     client = KimiClient(
         base_url=args.base_url,
         api_key=args.api_key,
         model=args.model,
+        enable_thinking=args.enable_thinking,
     )
 
     debug_records = load_debug_records(debug_jsonl_path) if args.resume else []
@@ -109,10 +132,12 @@ def main() -> None:
                 group_idx=group_idx,
                 cfg=cfg,
                 batch_size=args.batch_size,
+                concurrency=args.concurrency,
                 enable_semantic_qa=args.enable_semantic_qa,
                 enable_relation_qa=args.enable_relation_qa,
                 enable_backtranslation=args.enable_backtranslation,
                 relation_sample_limit=args.relation_sample_limit,
+                cache=cache,
             )
             debug_records = [r for r in debug_records if r["query_id"] != result["query_id"]]
             debug_records.append(result)
@@ -129,7 +154,8 @@ def main() -> None:
                     result["debug"]["qa"]["failed_items"],
                 )
 
-    logging.info("Done.")
+    cache.save(args.cache)
+    logging.info("Saved translation cache entries: %s -> %s", len(cache), args.cache)
     logging.info("MSA eval: %s", msa_eval_path)
     logging.info("Debug: %s", debug_jsonl_path)
     logging.info("QA report: %s", qa_report_path)

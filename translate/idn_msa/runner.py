@@ -11,6 +11,7 @@ from .hard_qa import check_structure
 from .kimi_client import KimiClient
 from .mask import annotate_item
 from .pipeline import process_items_with_retry
+from .translation_cache import TranslationCache
 
 logger = logging.getLogger(__name__)
 
@@ -47,10 +48,12 @@ def run_group(
     group_idx: int,
     cfg: PipelineConfig,
     batch_size: int,
+    concurrency: int,
     enable_semantic_qa: bool,
     enable_relation_qa: bool,
     enable_backtranslation: bool,
     relation_sample_limit: int,
+    cache: TranslationCache | None = None,
 ) -> dict[str, Any]:
     pre_errors = precheck_source(record, group_idx)
     if pre_errors:
@@ -71,10 +74,12 @@ def run_group(
         items=items,
         cfg=cfg,
         batch_size=batch_size,
+        concurrency=concurrency,
         enable_semantic_qa=enable_semantic_qa,
         enable_relation_qa=enable_relation_qa,
         enable_backtranslation=enable_backtranslation,
         relation_sample_limit=relation_sample_limit,
+        cache=cache,
     )
 
     group_id = items[0].group_id

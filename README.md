@@ -74,6 +74,8 @@ group 级通过率、失败项、重试轮次。样例见：`examples/qa_report_
 - 全库仅 **4992 条唯一印尼语句**（97.3% 跨组重复），应使用 `--cache translation_cache.jsonl` 做全局去重补翻
 - 主要失败：`latin_leakage`、过严 `arabic_ratio`、`entity_drift` / `action_polarity` 误杀（已在代码中修复）
 
+**可提交的结果文件（供 GPT/人工分析）**：[`results/group1_run/`](results/group1_run/)（含 debug jsonl、qa_report、gpt_analysis_summary.json）
+
 从 debug 导出 partial 结果：
 
 ```bash

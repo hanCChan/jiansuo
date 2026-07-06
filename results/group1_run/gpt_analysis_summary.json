@@ -1,0 +1,119 @@
+{
+  "query_id": "q_000001",
+  "eval_ready": false,
+  "run_note": "Group 1 only; main eval JSON empty because eval_ready=False",
+  "total_items": 4956,
+  "accepted": 2794,
+  "failed": 2162,
+  "pass_rate_pct": 56.38,
+  "query_msa": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟",
+  "query_failed": true,
+  "top_hard_errors": {
+    "latin_leakage": 3285,
+    "arabic_ratio_too_low": 652,
+    "entity_drift": 119,
+    "action_polarity_error": 82,
+    "term_confusion": 63,
+    "indonesian_residue": 10,
+    "missing_entity": 1
+  },
+  "failure_samples_by_error_type": {
+    "no_hard_errors": {
+      "item_id": "q_000001_query",
+      "role": "query",
+      "source_idn": "Bagaimana cara membuka blokir login myBCA karena salah memasukkan password atau BCA ID berulang kali?",
+      "msa": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟",
+      "hard_errors": []
+    },
+    "arabic_ratio_too_low": {
+      "item_id": "q_000001_n_0000",
+      "role": "negative",
+      "source_idn": "Di mana beli A Card Flazz, apakah di cabang BCA?",
+      "msa": "أين يمكن شراء بطاقة A Card Flazz، هل في فرع BCA؟",
+      "hard_errors": [
+        "arabic_ratio_too_low:0.521",
+        "latin_leakage:Card",
+        "latin_leakage:Flazz"
+      ]
+    },
+    "latin_leakage": {
+      "item_id": "q_000001_n_0007",
+      "role": "negative",
+      "source_idn": "Siapa yang bisa mengajukan fasilitas ATS Online BCA?",
+      "msa": "من يمكنه التقدم بطلب للحصول على خدمة ATS أونلاين BCA؟",
+      "hard_errors": [
+        "latin_leakage:ATS",
+        "latin_leakage:Online"
+      ]
+    },
+    "entity_drift": {
+      "item_id": "q_000001_n_0025",
+      "role": "negative",
+      "source_idn": "Bagaimana cara akses KlikBCA Individu via smartphone?",
+      "msa": "كيف يمكن الوصول إلى KlikBCA Individu عبر الهاتف الذكي؟",
+      "hard_errors": [
+        "entity_drift:KlikBCA Individu->KlikBCA"
+      ]
+    },
+    "term_confusion": {
+      "item_id": "q_000001_n_0053",
+      "role": "negative",
+      "source_idn": "Nomor HP e-Banking terblokir, bagaimana cara buka blokir melalui Halo BCA?",
+      "msa": "رقم الهاتف المحمول للخدمات المصرفية الإلكترونية محظور، كيف يمكن فك الحظر عبر BCA؟",
+      "hard_errors": [
+        "term_confusion:unblock",
+        "action_polarity_error:membuka_blokir",
+        "action_polarity_error:memblokir"
+      ]
+    },
+    "action_polarity_error": {
+      "item_id": "q_000001_n_2672",
+      "role": "negative",
+      "source_idn": "Mode Pengembang aktif di ponsel, bagaimana cara menonaktifkannya untuk myBCA?",
+      "msa": "وضع المطور مفعل في الهاتف، كيفية إلغاء تفعيله لـ myBCA؟",
+      "hard_errors": [
+        "action_polarity_error:deactivate"
+      ]
+    },
+    "missing_entity": {
+      "item_id": "q_000001_n_3099",
+      "role": "negative",
+      "source_idn": "Siapa pendamping saat cek kamera switching issuing?",
+      "msa": "من هو المسؤول أثناء فحص تبديل كاميرا إصدار PIN؟",
+      "hard_errors": [
+        "missing_entity:PIN"
+      ]
+    }
+  },
+  "accepted_samples": [
+    {
+      "role": "positive",
+      "source_idn": "BCA ID terblokir salah password, bagaimana?",
+      "msa": "BCA ID محظور بسبب كلمة مرور خاطئة، ماذا أفعل؟"
+    },
+    {
+      "role": "negative",
+      "source_idn": "Bagaimana download mutasi rekening harian dan batas periode di myBCA Bisnis?",
+      "msa": "كيف يمكن تنزيل حركات الحساب اليومية وما هي فترة التنزيل في myBCA Bisnis؟"
+    },
+    {
+      "role": "negative",
+      "source_idn": "Bagaimana registrasi Kartu Akses dan Fleet di myBCA Bisnis?",
+      "msa": "كيفية تسجيل بطاقة الوصول والأسطول في myBCA Bisnis؟"
+    },
+    {
+      "role": "negative",
+      "source_idn": "Kapan perubahan Plafon Top Up Kartu Fleet efektif di myBCA Bisnis?",
+      "msa": "متى يصبح تغيير سقف الشحن لبطاقة الأسطول ساري المفعول في myBCA Bisnis؟"
+    },
+    {
+      "role": "negative",
+      "source_idn": "Kenapa tidak bisa tambah atau hapus Kartu Akses di myBCA Bisnis?",
+      "msa": "لماذا لا يمكن إضافة أو حذف بطاقة الوصول في myBCA Bisnis؟"
+    }
+  ],
+  "files_for_full_analysis": {
+    "debug_jsonl": "cluster_retrieval_intent_eval_msa_debug.jsonl",
+    "qa_report": "qa_report.json"
+  }
+}

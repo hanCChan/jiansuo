@@ -1,0 +1,50 @@
+# BGE-M3 multi-mode retrieval benchmark (separate from dense-only 8-model run)
+#
+# Only bge_m3 among the local 8 models supports sparse/colbert/hybrid.
+# Original framework also had gte multi-mode, but gte is not in the local model set.
+#
+# Usage:
+#   ./run_eval_multimode_4gpu.sh
+#   ./run_eval_multimode_4gpu.sh --no-cache
+#   ./run_eval.sh --config config_multimode.yaml --models bge_m3 --modes sparse --max-queries 2
+
+paths:
+  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
+
+embedding:
+  device: "cuda"
+  batch_size: 64
+
+eval:
+  input_json: "../results/full_run/cluster_retrieval_intent_eval_msa_full.json"
+  device: "cuda:4"
+  batch_size: 64
+  report_dir: "./output/reports"
+  report_file: "intent_retrieval_eval_msa_multimode.json"
+  cache_dir: "./output/reports/score_cache_multimode"
+
+  cluster:
+    qa_json: "./qa.json"
+    report_file: "intent_retrieval_cluster_eval.json"
+    cache_dir: "./output/reports/score_cache_cluster"
+
+  models:
+    bge_m3:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [0.4, 0.2, 0.4]
+      modes: [dense, sparse, colbert, hybrid, dense+sparse]
+
+  # Split 5 modes across GPUs 4/5/6/7 (see run_eval_multimode_4gpu.sh)
+  gpu_plan:
+    - gpu: 4
+      modes: [dense, sparse]
+    - gpu: 5
+      modes: [colbert]
+    - gpu: 6
+      modes: [hybrid]
+    - gpu: 7
+      modes: [dense+sparse]

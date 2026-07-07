@@ -1,0 +1,123 @@
+{
+  "eval_set": "../results/full_run/cluster_retrieval_intent_eval_msa_full.json",
+  "num_queries": 37,
+  "results": [
+    {
+      "benchmark": "dense_8models",
+      "model": "bge_m3",
+      "mode": "dense",
+      "recall@1": 0.5946,
+      "recall@3": 0.7568,
+      "recall@5": 0.8378,
+      "eval_sec": 93.73
+    },
+    {
+      "benchmark": "dense_8models",
+      "model": "arabic_english_bge_m3",
+      "mode": "dense",
+      "recall@1": 0.5946,
+      "recall@3": 0.7568,
+      "recall@5": 0.8378,
+      "eval_sec": 83.8
+    },
+    {
+      "benchmark": "dense_8models",
+      "model": "multilingual_e5_large_instruct",
+      "mode": "dense",
+      "recall@1": 0.5135,
+      "recall@3": 0.7838,
+      "recall@5": 0.8378,
+      "eval_sec": 91.82
+    },
+    {
+      "benchmark": "dense_8models",
+      "model": "snowflake_arctic_l_v2",
+      "mode": "dense",
+      "recall@1": 0.4865,
+      "recall@3": 0.7838,
+      "recall@5": 0.8378,
+      "eval_sec": 83.42
+    },
+    {
+      "benchmark": "dense_8models",
+      "model": "gate_arabert_v1",
+      "mode": "dense",
+      "recall@1": 0.4865,
+      "recall@3": 0.7027,
+      "recall@5": 0.8919,
+      "eval_sec": 67.23
+    },
+    {
+      "benchmark": "dense_8models",
+      "model": "arabic_triplet_matryoshka_v2",
+      "mode": "dense",
+      "recall@1": 0.4054,
+      "recall@3": 0.6486,
+      "recall@5": 0.7568,
+      "eval_sec": 66.21
+    },
+    {
+      "benchmark": "dense_8models",
+      "model": "qwen3_embedding_0_6b",
+      "mode": "dense",
+      "recall@1": 0.4324,
+      "recall@3": 0.7027,
+      "recall@5": 0.8378,
+      "eval_sec": 118.95
+    },
+    {
+      "benchmark": "dense_8models",
+      "model": "embeddinggemma_300m",
+      "mode": "dense",
+      "recall@1": 0.4595,
+      "recall@3": 0.7297,
+      "recall@5": 0.7568,
+      "eval_sec": 152.41
+    },
+    {
+      "benchmark": "bge_m3_multimode",
+      "model": "bge_m3",
+      "mode": "dense",
+      "recall@1": 0.5946,
+      "recall@3": 0.7568,
+      "recall@5": 0.8378,
+      "eval_sec": 66.94
+    },
+    {
+      "benchmark": "bge_m3_multimode",
+      "model": "bge_m3",
+      "mode": "sparse",
+      "recall@1": 0.3243,
+      "recall@3": 0.5676,
+      "recall@5": 0.5946,
+      "eval_sec": 69.99
+    },
+    {
+      "benchmark": "bge_m3_multimode",
+      "model": "bge_m3",
+      "mode": "colbert",
+      "recall@1": 0.5946,
+      "recall@3": 0.7838,
+      "recall@5": 0.8378,
+      "eval_sec": 114.94
+    },
+    {
+      "benchmark": "bge_m3_multimode",
+      "model": "bge_m3",
+      "mode": "hybrid",
+      "recall@1": 0.6486,
+      "recall@3": 0.8108,
+      "recall@5": 0.8108,
+      "eval_sec": 174.42
+    },
+    {
+      "benchmark": "bge_m3_multimode",
+      "model": "bge_m3",
+      "mode": "dense+sparse",
+      "recall@1": 0.5946,
+      "recall@3": 0.7838,
+      "recall@5": 0.8378,
+      "eval_sec": 174.82
+    }
+  ]
+}

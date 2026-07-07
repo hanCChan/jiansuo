@@ -143,8 +143,8 @@ def process_items_with_retry(
 
     _update_cache(items, cache)
 
-    query_item = next(i for i in items if i.role == "query")
     if enable_relation_qa:
+        query_item = next(i for i in items if i.role == "query")
         for idx, candidate in enumerate(i for i in items if i.role != "query"):
             if candidate.role == "negative" and relation_sample_limit and idx >= relation_sample_limit:
                 candidate.qa.setdefault("relation_preserved", True)

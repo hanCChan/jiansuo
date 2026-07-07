@@ -1,0 +1,128 @@
+paths:
+  source_json: "../Qwen35-4B_en_test_intent_by_cluster_expressions.json"
+  output_json: "./output/intent_eval.json"
+  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
+  cluster_rules: "../question_cluster/prompts/cluster_rules.md"
+  expand_prompt: "./prompts/expand_intent_expressions.md"
+
+embedding:
+  model_path: "/data1/hcc/jiansuo/model/Qwen3-Embedding-0.6B"
+  device: "cuda"
+  batch_size: 64
+
+llm:
+  base_url: "http://10.16.137.2:8000/v1"
+  api_key: "EMPTY"
+  model: "Kimi-K2.6-CT-FP8KV"
+  temperature: 0.6
+  thinking: false
+  max_retries: 3
+  timeout_sec: 180
+
+sampling:
+  positives_per_cluster: 20
+  negatives_per_query: 20
+  random_seed: 42
+
+positives:
+  expand_via_llm: true
+  max_llm_rounds: 6
+  sample_expressions_for_prompt: 5
+
+negatives:
+  sim_floor: 0.50
+  sim_ceiling: 0.80
+  rank_start: 5
+  rank_end: 30
+  neighbor_threshold: 0.82
+  max_per_source_cluster: 2
+  bm25_weight: 0.4
+  embed_weight: 0.6
+
+confusion_groups:
+  blokir: ["1", "6", "10", "13", "20", "39"]
+  credit_limit: ["26", "27"]
+  password_recovery: ["2", "7", "11"]
+  verification: ["4", "9"]
+  transfer_status: ["16", "17", "40"]
+
+# Intent retrieval benchmark (MSA full corpus, 37 queries)
+eval:
+  input_json: "../results/full_run/cluster_retrieval_intent_eval_msa_full.json"
+  device: "cuda:4"
+  batch_size: 64
+  report_dir: "./output/reports"
+  report_file: "intent_retrieval_eval_msa.json"
+  cache_dir: "./output/reports/score_cache"
+
+  cluster:
+    qa_json: "./qa.json"
+    report_file: "intent_retrieval_cluster_eval.json"
+    cache_dir: "./output/reports/score_cache_cluster"
+
+  # 8 local embedding models; dense-only standard retrieval
+  models:
+    bge_m3:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: dense
+      use_fp16: true
+      modes: [dense]
+
+    arabic_english_bge_m3:
+      path: "/data1/hcc/jiansuo/model/arabic-english-bge-m3"
+      backend: dense
+      use_fp16: true
+      modes: [dense]
+
+    multilingual_e5_large_instruct:
+      path: "/data1/hcc/jiansuo/model/multilingual-e5-large-instruct"
+      backend: dense
+      use_fp16: true
+      query_style: e5_instruct
+      task_description: "Given a user question in Modern Standard Arabic, retrieve the matching FAQ question"
+      modes: [dense]
+
+    snowflake_arctic_l_v2:
+      path: "/data1/hcc/jiansuo/model/snowflake-arctic-embed-l-v2.0"
+      backend: dense
+      use_fp16: true
+      query_style: snowflake_prefix
+      modes: [dense]
+
+    gate_arabert_v1:
+      path: "/data1/hcc/jiansuo/model/GATE-AraBert-v1"
+      backend: dense
+      use_fp16: true
+      modes: [dense]
+
+    arabic_triplet_matryoshka_v2:
+      path: "/data1/hcc/jiansuo/model/Arabic-Triplet-Matryoshka-V2"
+      backend: dense
+      use_fp16: true
+      modes: [dense]
+
+    qwen3_embedding_0_6b:
+      path: "/data1/hcc/jiansuo/model/Qwen3-Embedding-0.6B"
+      backend: dense
+      use_fp16: true
+      query_style: qwen3_prompt
+      modes: [dense]
+
+    embeddinggemma_300m:
+      path: "/data1/hcc/jiansuo/model/embeddinggemma-300m"
+      backend: dense
+      use_fp16: false
+      query_style: gemma_retrieval
+      gemma_task: "search result"
+      modes: [dense]
+
+  # 4-GPU parallel plan (CUDA 4/5/6/7), 2 models per GPU
+  gpu_plan:
+    - gpu: 4
+      models: [bge_m3, arabic_english_bge_m3]
+    - gpu: 5
+      models: [multilingual_e5_large_instruct, snowflake_arctic_l_v2]
+    - gpu: 6
+      models: [gate_arabert_v1, arabic_triplet_matryoshka_v2]
+    - gpu: 7
+      models: [qwen3_embedding_0_6b, embeddinggemma_300m]

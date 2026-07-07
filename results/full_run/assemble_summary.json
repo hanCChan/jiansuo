@@ -1,0 +1,11 @@
+{
+  "total_groups": 37,
+  "cache_entries": 4992,
+  "new_queries_translated": 36,
+  "missing_queries_expected": 36,
+  "cache_misses": 0,
+  "ent_placeholder_remaining": 0,
+  "group1_negatives": 4954,
+  "per_group_negative_count": 4954,
+  "complete": true
+}

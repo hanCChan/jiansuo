@@ -1,6 +1,9 @@
 # Large model weights (download locally)
 model/
 
+# Local conda install
+miniconda3/
+
 # Pipeline runtime outputs
 translate/output/
 *.log

@@ -1,0 +1,6 @@
+# Runtime caches and logs (reproducible from scripts)
+output/reports/score_cache/
+output/reports/score_cache_multimode/
+output/reports/logs/
+output/reports/smoke_*.json
+output/reports/partial_*.json

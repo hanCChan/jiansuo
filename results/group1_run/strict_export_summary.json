@@ -1,0 +1,9 @@
+{
+  "total_items": 4956,
+  "passed": 4956,
+  "failed": 0,
+  "pass_rate_pct": 100.0,
+  "strict_eval_ready": true,
+  "negative_in_output": 4954,
+  "negative_expected": 4954
+}

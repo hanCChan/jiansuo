@@ -32,7 +32,7 @@ def _is_hollow_translation(msa: str) -> bool:
 def _source_has_dual_polarity(source_idn: str) -> bool:
     lower = source_idn.lower()
     blocked = any(p in lower for p in ("terblokir", "diblokir", "blokir"))
-    unblocked = any(p in lower for p in ("membuka blokir", "buka blokir"))
+    unblocked = any(p in lower for p in ("membuka blokir", "buka blokir", "pembukaan blokir"))
     return blocked and unblocked
 
 

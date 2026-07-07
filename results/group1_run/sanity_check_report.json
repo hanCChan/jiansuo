@@ -1,0 +1,25 @@
+{
+  "file": "results/group1_run/cluster_retrieval_intent_eval_msa_strict.json",
+  "checks": {
+    "is_list": true,
+    "group_count": 1,
+    "negative_count": 4954,
+    "query_non_empty": true,
+    "positive_non_empty": true,
+    "positive_negative_overlap": 0,
+    "keys_ok": true,
+    "strict_qa_pass_rate_pct": 100.0,
+    "ent_placeholder_negatives": 0,
+    "structural_pass": true,
+    "embedding_ready": true
+  },
+  "placeholder_fix": {
+    "fixed_items": 482,
+    "method": "restore_kimi_placeholders from source_idn",
+    "script": "translate/scripts/fix_ent_placeholders.py"
+  },
+  "notes": [
+    "All 482 Kimi <ENT_*> hallucinations restored from source text.",
+    "Hard QA strict 100%, sanity check PASS."
+  ]
+}

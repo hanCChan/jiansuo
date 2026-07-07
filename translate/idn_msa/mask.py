@@ -17,12 +17,20 @@ def build_entity_maps(entities: Iterable[str]) -> tuple[list[tuple[str, str]], d
     return forward, reverse
 
 
+def _entity_pattern(entity: str) -> re.Pattern[str]:
+    escaped = re.escape(entity)
+    # Avoid substring false positives: Batman->ATM, Sweeping->PIN.
+    if len(entity) <= 4 or entity.isupper():
+        return re.compile(rf"(?<![A-Za-z]){escaped}(?![A-Za-z])", flags=re.IGNORECASE)
+    return re.compile(escaped, flags=re.IGNORECASE)
+
+
 def mask_text(text: str, cfg: PipelineConfig) -> tuple[str, list[str]]:
     forward, _ = build_entity_maps(cfg.entities)
     found: list[str] = []
     masked = text
     for entity, placeholder in forward:
-        pattern = re.compile(re.escape(entity), flags=re.IGNORECASE)
+        pattern = _entity_pattern(entity)
         if pattern.search(masked):
             found.append(entity)
             masked = pattern.sub(placeholder, masked)

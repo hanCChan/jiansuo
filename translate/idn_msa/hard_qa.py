@@ -89,6 +89,10 @@ def _contains_forbidden_phrase(text: str, forbidden: str) -> bool:
         for marker in unblock_markers:
             if marker in text and forbidden in text:
                 return False
+    if forbidden in ("تفعيل", "تنشيط"):
+        for phrase in ("إلغاء تفعيل", "إيقاف التفعيل"):
+            if phrase in text:
+                return False
     return True
 
 
@@ -135,13 +139,32 @@ def _entity_satisfied_by_translation(entity: str, text: str, cfg: PipelineConfig
 def _dual_block_unblock_source(item: TranslationItem) -> bool:
     lower = item.source_idn.lower()
     blocked = any(p in lower for p in ("terblokir", "terblok", "diblokir", "blokir"))
-    unblocked = any(p in lower for p in ("membuka blokir", "buka blokir"))
+    unblocked = any(p in lower for p in ("membuka blokir", "buka blokir", "pembukaan blokir"))
     return blocked and unblocked
 
 
 def _has_unblock_phrase(text: str) -> bool:
     phrases = ("فك الحظر", "فك حظر", "إلغاء الحظر", "إعادة فتح", "رفع الحظر")
     return any(p in text for p in phrases)
+
+
+def _dual_activate_deactivate_source(item: TranslationItem) -> bool:
+    lower = item.source_idn.lower()
+    activated = any(p in lower for p in ("mengaktifkan", "aktivasi"))
+    deactivated = any(p in lower for p in ("menonaktifkan", "ditutup", "nonaktif"))
+    return activated and deactivated
+
+
+def _has_activate_phrase(text: str) -> bool:
+    norm = normalize_for_embedding(text)
+    phrases = ("تفعيل", "تنشيط", "إعادة تنشيط", "إعادة تفعيل")
+    return any(p in norm for p in phrases)
+
+
+def _has_deactivate_phrase(text: str) -> bool:
+    norm = normalize_for_embedding(text)
+    phrases = ("إيقاف", "إغلاق", "أغلق", "تعطيل", "إلغاء تفعيل")
+    return any(p in norm for p in phrases)
 
 
 def check_structure(items: list[TranslationItem], expected_counts: dict[str, int]) -> list[str]:
@@ -171,7 +194,7 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
     if PLACEHOLDER_RE.search(text):
         errors.append("unrestored_entity_placeholder")
     elif KIMI_PLACEHOLDER_RE.search(text):
-        warnings.append("kimi_hallucinated_placeholder")
+        errors.append("kimi_hallucinated_placeholder")
 
     if CJK_RE.search(text):
         errors.append("cjk_characters_found")
@@ -240,8 +263,8 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
         forbidden = [f.lower() for f in spec.get("ar_forbidden", [])]
         if expected and not any(e in lower_tgt for e in expected):
             warnings.append(f"term_missing:{term_name}")
-        if any(_contains_forbidden_phrase(lower_tgt, f) for f in forbidden):
-            errors.append(f"term_confusion:{term_name}")
+            if any(_contains_forbidden_phrase(lower_tgt, f) for f in forbidden):
+                errors.append(f"term_confusion:{term_name}")
 
     for action_name, spec in cfg.action_polarity.get("actions", {}).items():
         if action_name not in item.actions_found:
@@ -255,6 +278,10 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
         if action_name == "memblokir" and _dual_block_unblock_source(item) and _has_unblock_phrase(text):
             warnings.append("dual_block_unblock_allowed")
             continue
+        if action_name in ("activate", "deactivate") and _dual_activate_deactivate_source(item):
+            if _has_activate_phrase(text) and _has_deactivate_phrase(text):
+                warnings.append("dual_activate_deactivate_allowed")
+                continue
         if forbidden and any(_contains_forbidden_phrase(lower_tgt, f) for f in forbidden):
             errors.append(f"action_polarity_error:{action_name}")
 

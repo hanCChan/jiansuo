@@ -42,6 +42,23 @@ def prepare_items(record: dict[str, Any], group_idx: int, cfg: PipelineConfig) -
     return items
 
 
+def assemble_partial_output(items: list[TranslationItem]) -> dict[str, Any] | None:
+    """Partial eval: query + all positives must pass; negatives keep accepted only."""
+    query = next(i for i in items if i.role == "query")
+    positives = sorted([i for i in items if i.role == "positive"], key=lambda x: x.candidate_index)
+    negatives = sorted([i for i in items if i.role == "negative"], key=lambda x: x.candidate_index)
+    if query.final_status != "accepted":
+        return None
+    if any(p.final_status != "accepted" for p in positives):
+        return None
+    accepted_neg = [n for n in negatives if n.final_status == "accepted"]
+    return {
+        "query": query.msa_raw,
+        "positive": [p.msa_raw for p in positives],
+        "negative": [n.msa_raw for n in accepted_neg],
+    }
+
+
 def run_group(
     client: KimiClient,
     record: dict[str, Any],
@@ -85,12 +102,15 @@ def run_group(
     group_id = items[0].group_id
     debug = assemble_group_output_debug(group_id, items)
     simple = assemble_group_output_simple(items)
+    partial = assemble_partial_output(items)
     return {
         "query_id": group_id,
         "group_index": group_idx,
         "simple": simple,
+        "partial": partial,
         "debug": debug,
         "eval_ready": not debug["qa"]["failed_items"],
+        "partial_ready": partial is not None,
     }
 
 

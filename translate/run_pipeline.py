@@ -21,6 +21,7 @@ DEFAULT_CACHE = DEFAULT_OUTPUT_DIR / "translation_cache.jsonl"
 DEFAULT_BASE_URL = "http://10.16.137.2:8000/v1"
 DEFAULT_MODEL = "Kimi-K2.6-CT-FP8KV"
 MSA_EVAL_NAME = "cluster_retrieval_intent_eval_msa.json"
+MSA_PARTIAL_NAME = "cluster_retrieval_intent_eval_msa_partial.json"
 MSA_DEBUG_NAME = "cluster_retrieval_intent_eval_msa_debug.jsonl"
 QA_REPORT_NAME = "qa_report.json"
 
@@ -80,8 +81,10 @@ def load_debug_records(debug_path: Path) -> list[dict]:
 
 
 def rebuild_outputs(debug_records: list[dict], output_dir: Path) -> None:
-    simple_records = [record["simple"] for record in debug_records if record.get("eval_ready")]
-    write_msa_eval_json(simple_records, output_dir / MSA_EVAL_NAME)
+    strict_records = [record["simple"] for record in debug_records if record.get("eval_ready")]
+    partial_records = [record["partial"] for record in debug_records if record.get("partial_ready")]
+    write_msa_eval_json(strict_records, output_dir / MSA_EVAL_NAME)
+    write_msa_eval_json(partial_records, output_dir / MSA_PARTIAL_NAME)
     write_qa_report(debug_records, output_dir / QA_REPORT_NAME)
 
 
@@ -146,7 +149,13 @@ def main() -> None:
             rebuild_outputs(debug_records, args.output_dir)
 
             if result["eval_ready"]:
-                logging.info("Group %s accepted for eval output", group_id)
+                logging.info("Group %s accepted for strict eval output", group_id)
+            elif result.get("partial_ready"):
+                logging.warning(
+                    "Group %s partial eval ready (%s accepted negatives); strict eval skipped",
+                    group_id,
+                    len(result["partial"]["negative"]),
+                )
             else:
                 logging.warning(
                     "Group %s failed QA; kept in debug only: %s",
@@ -156,7 +165,8 @@ def main() -> None:
 
     cache.save(args.cache)
     logging.info("Saved translation cache entries: %s -> %s", len(cache), args.cache)
-    logging.info("MSA eval: %s", msa_eval_path)
+    logging.info("MSA strict eval: %s", msa_eval_path)
+    logging.info("MSA partial eval: %s", args.output_dir / MSA_PARTIAL_NAME)
     logging.info("Debug: %s", debug_jsonl_path)
     logging.info("QA report: %s", qa_report_path)
 

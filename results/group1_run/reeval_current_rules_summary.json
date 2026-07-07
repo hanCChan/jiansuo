@@ -1,0 +1,26 @@
+{
+  "groups": [
+    {
+      "query_id": "q_000001",
+      "total_items": 4956,
+      "accepted": 4768,
+      "failed": 188,
+      "pass_rate_pct": 96.21,
+      "strict_eval_ready": false,
+      "partial_eval_ready": true,
+      "partial_negative_count": 4766,
+      "top_hard_errors": {
+        "arabic_ratio_too_low": 107,
+        "missing_entity": 55,
+        "action_polarity_error": 21,
+        "unrestored_entity_placeholder": 8,
+        "term_confusion": 4
+      },
+      "top_warnings": {
+        "latin_unknown": 312,
+        "term_missing": 5,
+        "action_missing": 4
+      }
+    }
+  ]
+}

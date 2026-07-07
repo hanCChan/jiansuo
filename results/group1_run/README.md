@@ -2,40 +2,51 @@
 
 第 1 组（`q_000001`）印尼语 → MSA 翻译流水线输出，2026-07-06 运行。
 
+## 推荐阅读顺序
+
+1. **`reeval_current_rules_summary.json`** — 用**当前 main 规则**对同一批译文重评（无需重调 Kimi）
+2. **`gpt_analysis_summary.json`** — 旧规则下的原始统计（56.4% 通过率，供对比）
+3. **`cluster_retrieval_intent_eval_msa_partial.json`** — **可用于 embedding 实验**的 partial eval
+4. **`failed_after_reeval.jsonl`** — 重评后仍失败的 188 条
+5. **`cluster_retrieval_intent_eval_msa_debug.jsonl`** — 完整 debug（~3MB）
+
+## 关键数字对比
+
+| 指标 | 旧规则（首次 run） | 当前规则重评（同批译文） |
+|------|-------------------|-------------------------|
+| 通过率 | 56.4% (2794/4956) | **96.2% (4768/4956)** |
+| strict eval | 不可用 `[]` | 仍不可用（188 条失败） |
+| partial eval | 无 | **可用**（query+positive 通过，4766 negatives） |
+
+结论：**大量失败是 QA 误杀，不是 Kimi 整体翻错。**
+
 ## 文件说明
 
 | 文件 | 用途 |
 |------|------|
-| `gpt_analysis_summary.json` | **先看这个**：通过率、错误分布、失败/成功样例 |
-| `qa_report.json` | group 级 QA 汇总，含全部 `failed_items` id 列表 |
-| `cluster_retrieval_intent_eval_msa_debug.jsonl` | 完整 debug（单行 JSON，~3MB，含每条 idn/msa/qa） |
-| `cluster_retrieval_intent_eval_msa.json` | 主 eval 输出（本 run 为空 `[]`，因 eval_ready=False） |
+| `reeval_current_rules_summary.json` | 重评汇总：错误分布、partial 是否可用 |
+| `cluster_retrieval_intent_eval_msa_partial.json` | partial eval JSON（embedding 先用这个） |
+| `failed_after_reeval.jsonl` | 重评后仍失败 item，供定点 repair |
+| `qa_report.json` | 首次 run 的 group QA（旧规则） |
+| `cluster_retrieval_intent_eval_msa_debug.jsonl` | 完整 idn/msa/qa |
+| `cluster_retrieval_intent_eval_msa.json` | strict eval（空 `[]`） |
 
-## 关键结论（摘要）
+## 重评命令（本地复现）
 
-- 4956 条 item，**2794 通过 / 2162 失败**（56.4%）
-- 主输出为空：设计为 **全组 QA 全过** 才写入 eval JSON
-- 主要失败：`latin_leakage`、`arabic_ratio_too_low`、实体/术语/极性规则误杀
+```bash
+cd translate
+python3 scripts/reevaluate_debug_with_current_qa.py \
+  --debug ../results/group1_run/cluster_retrieval_intent_eval_msa_debug.jsonl \
+  --summary-out ../results/group1_run/reeval_current_rules_summary.json \
+  --partial-out ../results/group1_run/cluster_retrieval_intent_eval_msa_partial.json \
+  --failed-out ../results/group1_run/failed_after_reeval.jsonl
+```
 
-## 给 GPT 的分析建议
+## 给 GPT 的分析 prompt 示例
 
-1. 读 `gpt_analysis_summary.json` 了解整体
-2. 按 `top_hard_errors` 分类看 `failure_samples_by_error_type`
-3. 需要逐条细节时解析 `debug.jsonl` 里的 `positive[]` / `negative[]`
-4. 文字版根因分析见：`translate/docs/GROUP1_RUN_ANALYSIS.md`
-
-## debug.jsonl 结构（单行）
-
-```json
-{
-  "query_id": "q_000001",
-  "eval_ready": false,
-  "simple": { "query", "positive", "negative" },
-  "debug": {
-    "query_idn", "query_msa",
-    "positive": [{ "id", "idn", "msa", "qa", "final_status" }],
-    "negative": [...],
-    "qa": { "failed_items": [...] }
-  }
-}
+```
+请对比 results/group1_run/ 下：
+- gpt_analysis_summary.json（旧规则 56%）
+- reeval_current_rules_summary.json（新规则 96%）
+说明哪些失败是规则误杀、哪些是真翻译问题，并读 failed_after_reeval.jsonl 给出 repair 建议。
 ```

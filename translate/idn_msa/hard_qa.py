@@ -11,6 +11,9 @@ from .unicode_norm import normalize_for_embedding, normalize_unicode
 ARABIC_RE = re.compile(
     r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]"
 )
+ARABIC_WORD_RE = re.compile(
+    r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+"
+)
 LATIN_RE = re.compile(r"[A-Za-z]+")
 CJK_RE = re.compile(r"[\u4E00-\u9FFF]")
 PLACEHOLDER_RE = re.compile(r"<ENT_\d{2}>")
@@ -20,8 +23,37 @@ def _latin_tokens(text: str) -> list[str]:
     return LATIN_RE.findall(text)
 
 
-def _is_whitelisted_latin(token: str, cfg: PipelineConfig) -> bool:
+def _source_latin_allowlist(item: TranslationItem) -> set[str]:
+    allowed: set[str] = set()
+    for token in _latin_tokens(item.source_idn):
+        allowed.add(token)
+        allowed.add(token.lower())
+    for entity in item.entities_found:
+        for token in _latin_tokens(entity):
+            allowed.add(token)
+            allowed.add(token.lower())
+    return allowed
+
+
+def _must_translate_latin(cfg: PipelineConfig) -> set[str]:
+    must: set[str] = {w.lower() for w in cfg.residue_words}
+    for term_name, spec in cfg.glossary.get("terms", {}).items():
+        if term_name in {"pin", "otp"}:
+            continue
+        for trigger in spec.get("id_triggers", []):
+            if trigger.isascii():
+                must.add(trigger.lower())
+    return must
+
+
+def _is_whitelisted_latin(
+    token: str,
+    cfg: PipelineConfig,
+    source_allowlist: set[str] | None = None,
+) -> bool:
     low = token.lower()
+    if source_allowlist and (token in source_allowlist or low in source_allowlist):
+        return True
     whitelist = {w.lower() for w in cfg.latin_whitelist}
     allowed_fragments = {"face", "id", "plus", "bisnis", "individu", "corporate", "online", "card"}
     if low in whitelist or low in allowed_fragments:
@@ -29,33 +61,63 @@ def _is_whitelisted_latin(token: str, cfg: PipelineConfig) -> bool:
     return any(low in w.lower() or w.lower() in low for w in cfg.latin_whitelist)
 
 
-def _arabic_ratio(text: str, cfg: PipelineConfig) -> float:
+def _arabic_ratio(text: str, cfg: PipelineConfig, source_allowlist: set[str]) -> float:
     if not text:
         return 0.0
     arabic_chars = len(ARABIC_RE.findall(text))
-    # Exclude whitelisted Latin product tokens from denominator.
     non_arabic = "".join(ch for ch in text if not ARABIC_RE.match(ch))
     latin_tokens = _latin_tokens(non_arabic)
-    whitelisted_latin_chars = sum(len(tok) for tok in latin_tokens if _is_whitelisted_latin(tok, cfg))
+    whitelisted_latin_chars = sum(
+        len(tok) for tok in latin_tokens if _is_whitelisted_latin(tok, cfg, source_allowlist)
+    )
     denom = max(len(text) - whitelisted_latin_chars, 1)
     return arabic_chars / denom
 
 
 def _contains_forbidden_phrase(text: str, forbidden: str) -> bool:
-    """Match forbidden action words without substring false positives."""
     if forbidden not in text:
         return False
     if " " in forbidden:
         return forbidden in text
-    # Single-token forbidden must not match inside a longer expected phrase.
-    expected_phrases = ["فك الحظر", "فك حظر", "إلغاء الحظر", "إعادة فتح"]
-    for phrase in expected_phrases:
+    unblock_markers = ("فك", "إلغاء", "إعادة", "رفع")
+    unblock_phrases = ("فك الحظر", "فك حظر", "إلغاء الحظر", "إعادة فتح", "رفع الحظر")
+    for phrase in unblock_phrases:
         if forbidden in phrase and phrase in text:
             return False
     if forbidden in ("حظر", "إيقاف", "تجميد"):
-        for marker in ("فك", "إلغاء", "إعادة"):
+        for marker in unblock_markers:
             if marker in text and forbidden in text:
                 return False
+    return True
+
+
+def _entities_present_in_text(text: str, entities: list[str]) -> list[str]:
+    lower_text = text.lower()
+    found: list[str] = []
+    for entity in sorted(entities, key=len, reverse=True):
+        if entity in text or entity.lower() in lower_text:
+            found.append(entity)
+    return found
+
+
+def _is_entity_drift(
+    src_entity: str,
+    forbidden: str,
+    text: str,
+    source_entities: set[str],
+    source_text: str,
+    all_entities: list[str],
+) -> bool:
+    if forbidden not in text and forbidden.lower() not in text.lower():
+        return False
+    if forbidden in source_entities or forbidden in source_text:
+        return False
+    if src_entity in text or src_entity.lower() in text.lower():
+        return False
+    text_entities = _entities_present_in_text(text, all_entities)
+    for entity in text_entities:
+        if forbidden in entity and entity in source_entities:
+            return False
     return True
 
 
@@ -77,6 +139,8 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
     text = item.msa_clean or item.msa_raw or ""
+    source_allowlist = _source_latin_allowlist(item)
+    must_translate = _must_translate_latin(cfg)
 
     if not text.strip():
         errors.append("empty_translation")
@@ -87,19 +151,35 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
     if CJK_RE.search(text):
         errors.append("cjk_characters_found")
 
-    ratio = _arabic_ratio(text, cfg)
-    if ratio < 0.55:
-        errors.append(f"arabic_ratio_too_low:{ratio:.3f}")
+    ratio = _arabic_ratio(text, cfg, source_allowlist)
+    latin_tokens = _latin_tokens(text)
+    residue_hits = [
+        token
+        for token in latin_tokens
+        if not _is_whitelisted_latin(token, cfg, source_allowlist)
+        and token.lower() in {w.lower() for w in cfg.residue_words}
+    ]
 
-    residue = {w.lower() for w in cfg.residue_words}
-    for token in _latin_tokens(text):
-        if _is_whitelisted_latin(token, cfg):
+    if ratio < 0.55:
+        product_only_latin = latin_tokens and all(
+            _is_whitelisted_latin(token, cfg, source_allowlist) for token in latin_tokens
+        )
+        arabic_words = ARABIC_WORD_RE.findall(text)
+        if product_only_latin and len(arabic_words) >= 4 and not residue_hits:
+            warnings.append(f"arabic_ratio_low_but_product_heavy:{ratio:.3f}")
+        else:
+            errors.append(f"arabic_ratio_too_low:{ratio:.3f}")
+
+    for token in latin_tokens:
+        if _is_whitelisted_latin(token, cfg, source_allowlist):
             continue
         low = token.lower()
-        if low in residue:
+        if low in must_translate:
+            errors.append(f"must_translate_latin:{token}")
+        elif low in {w.lower() for w in cfg.residue_words}:
             errors.append(f"indonesian_residue:{token}")
         else:
-            errors.append(f"latin_leakage:{token}")
+            warnings.append(f"latin_unknown:{token}")
 
     for entity in item.entities_found:
         if entity not in text and entity.lower() not in text.lower():
@@ -111,12 +191,15 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
         if src_entity not in source_entities:
             continue
         for forbidden in forbidden_list:
-            if forbidden == src_entity or forbidden not in text:
-                continue
-            # Allow co-occurrence when source also mentions the forbidden entity.
-            if forbidden in source_entities or forbidden in item.source_idn:
-                continue
-            errors.append(f"entity_drift:{src_entity}->{forbidden}")
+            if _is_entity_drift(
+                src_entity,
+                forbidden,
+                text,
+                source_entities,
+                item.source_idn,
+                cfg.entities,
+            ):
+                errors.append(f"entity_drift:{src_entity}->{forbidden}")
 
     lower_src = item.source_idn.lower()
     lower_tgt = text.lower()
@@ -158,7 +241,7 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
         "hard_errors": errors,
         "hard_warnings": warnings,
         "arabic_ratio": round(ratio, 4),
-        "latin_tokens": _latin_tokens(text),
+        "latin_tokens": latin_tokens,
     }
 
 

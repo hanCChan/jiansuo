@@ -74,9 +74,24 @@ group 级通过率、失败项、重试轮次。样例见：`examples/qa_report_
 - 全库仅 **4992 条唯一印尼语句**（97.3% 跨组重复），应使用 `--cache translation_cache.jsonl` 做全局去重补翻
 - 主要失败：`latin_leakage`、过严 `arabic_ratio`、`entity_drift` / `action_polarity` 误杀（已在代码中修复）
 
-**可提交的结果文件（供 GPT/人工分析）**：[`results/group1_run/`](results/group1_run/)（含 debug jsonl、qa_report、gpt_analysis_summary.json）
+**可提交的结果文件（供 GPT/人工分析）**：[`results/group1_run/`](results/group1_run/)
 
-从 debug 导出 partial 结果：
+- 旧规则首次 run：`gpt_analysis_summary.json`（56.4% 通过）
+- **当前规则重评同批译文**：`reeval_current_rules_summary.json`（**96.2%** 通过）
+- **embedding 可用 partial eval**：`cluster_retrieval_intent_eval_msa_partial.json`
+
+重评（不重新调 Kimi）：
+
+```bash
+cd translate
+python3 scripts/reevaluate_debug_with_current_qa.py \
+  --debug ../results/group1_run/cluster_retrieval_intent_eval_msa_debug.jsonl \
+  --summary-out ../results/group1_run/reeval_current_rules_summary.json \
+  --partial-out ../results/group1_run/cluster_retrieval_intent_eval_msa_partial.json \
+  --failed-out ../results/group1_run/failed_after_reeval.jsonl
+```
+
+从 debug 导出 partial 结果（旧脚本）：
 
 ```bash
 python3 translate/scripts/export_partial_from_debug.py \

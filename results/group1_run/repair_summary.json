@@ -1,0 +1,13 @@
+{
+  "failed_before": 188,
+  "rule_false_positive": 28,
+  "sent_to_repair": 160,
+  "repair_accepted": 169,
+  "repair_failed": 19,
+  "dropped": 19,
+  "by_repair_status": {
+    "accepted": 169,
+    "failed": 11,
+    "rule_still_fail": 8
+  }
+}

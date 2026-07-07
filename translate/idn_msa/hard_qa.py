@@ -4,7 +4,7 @@ import json
 import re
 from typing import Any
 
-from .config_loader import PipelineConfig
+from .config_loader import PipelineConfig, load_triage_config
 from .expand import TranslationItem
 from .unicode_norm import normalize_for_embedding, normalize_unicode
 
@@ -17,6 +17,7 @@ ARABIC_WORD_RE = re.compile(
 LATIN_RE = re.compile(r"[A-Za-z]+")
 CJK_RE = re.compile(r"[\u4E00-\u9FFF]")
 PLACEHOLDER_RE = re.compile(r"<ENT_\d{2}>")
+KIMI_PLACEHOLDER_RE = re.compile(r"<ENT[^>]*>", re.IGNORECASE)
 
 
 def _latin_tokens(text: str) -> list[str]:
@@ -121,6 +122,28 @@ def _is_entity_drift(
     return True
 
 
+def _entity_satisfied_by_translation(entity: str, text: str, cfg: PipelineConfig) -> bool:
+    triage = load_triage_config(cfg.config_dir)
+    translatable = set(triage.get("translatable_entities", []))
+    if entity not in translatable:
+        return False
+    aliases = triage.get("translatable_ar_aliases", {}).get(entity, [])
+    lower_text = text.lower()
+    return any(alias.lower() in lower_text for alias in aliases)
+
+
+def _dual_block_unblock_source(item: TranslationItem) -> bool:
+    lower = item.source_idn.lower()
+    blocked = any(p in lower for p in ("terblokir", "terblok", "diblokir", "blokir"))
+    unblocked = any(p in lower for p in ("membuka blokir", "buka blokir"))
+    return blocked and unblocked
+
+
+def _has_unblock_phrase(text: str) -> bool:
+    phrases = ("فك الحظر", "فك حظر", "إلغاء الحظر", "إعادة فتح", "رفع الحظر")
+    return any(p in text for p in phrases)
+
+
 def check_structure(items: list[TranslationItem], expected_counts: dict[str, int]) -> list[str]:
     errors: list[str] = []
     roles = {"query": 0, "positive": 0, "negative": 0}
@@ -147,6 +170,8 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
 
     if PLACEHOLDER_RE.search(text):
         errors.append("unrestored_entity_placeholder")
+    elif KIMI_PLACEHOLDER_RE.search(text):
+        warnings.append("kimi_hallucinated_placeholder")
 
     if CJK_RE.search(text):
         errors.append("cjk_characters_found")
@@ -182,8 +207,12 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
             warnings.append(f"latin_unknown:{token}")
 
     for entity in item.entities_found:
-        if entity not in text and entity.lower() not in text.lower():
-            errors.append(f"missing_entity:{entity}")
+        if entity in text or entity.lower() in text.lower():
+            continue
+        if _entity_satisfied_by_translation(entity, text, cfg):
+            warnings.append(f"entity_translated_ok:{entity}")
+            continue
+        errors.append(f"missing_entity:{entity}")
 
     entity_conf = cfg.confusions.get("entity_confusions", {})
     source_entities = set(item.entities_found)
@@ -221,6 +250,11 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
         forbidden = [f.lower() for f in spec.get("ar_forbidden", [])]
         if expected and not any(e in lower_tgt for e in expected):
             warnings.append(f"action_missing:{action_name}")
+        if not forbidden:
+            continue
+        if action_name == "memblokir" and _dual_block_unblock_source(item) and _has_unblock_phrase(text):
+            warnings.append("dual_block_unblock_allowed")
+            continue
         if forbidden and any(_contains_forbidden_phrase(lower_tgt, f) for f in forbidden):
             errors.append(f"action_polarity_error:{action_name}")
 

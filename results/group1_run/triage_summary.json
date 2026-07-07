@@ -1,0 +1,14 @@
+{
+  "total_failed": 188,
+  "by_priority": {
+    "P0": 160,
+    "RULE": 28
+  },
+  "by_action": {
+    "repair_translation": 160,
+    "adjust_qa_rule": 28
+  },
+  "to_repair": 160,
+  "rule_adjust": 28,
+  "to_drop": 0
+}

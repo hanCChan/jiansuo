@@ -18,6 +18,12 @@ class PipelineConfig:
     config_dir: Path
 
 
+def load_triage_config(config_dir: Path | None = None) -> dict[str, Any]:
+    root = config_dir or Path(__file__).resolve().parent.parent / "config"
+    with open(root / "triage.yaml", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
 def load_config(config_dir: Path | None = None) -> PipelineConfig:
     root = config_dir or Path(__file__).resolve().parent.parent / "config"
     with open(root / "entities.yaml", encoding="utf-8") as f:

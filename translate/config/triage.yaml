@@ -1,0 +1,57 @@
+# Entities that may be translated to Arabic equivalents (missing_entity -> warning, not error)
+translatable_entities:
+  - ATM
+  - KTP
+  - HP
+  - email
+
+# Arabic equivalents that satisfy translatable entity presence
+translatable_ar_aliases:
+  ATM:
+    - جهاز الصراف
+    - الصراف الآلي
+    - أجهزة الصراف
+  KTP:
+    - بطاقة الهوية
+    - الهوية الإلكترونية
+    - بطاقة الهوية الإلكترونية
+  HP:
+    - رقم الهاتف
+    - الهاتف المحمول
+    - الجوال
+  email:
+    - البريد الإلكتروني
+    - البريد
+
+# Core entities/terms: if missing in translation -> P0 repair
+core_must_preserve:
+  - BCA
+  - myBCA
+  - m-BCA
+  - KlikBCA
+  - BCA ID
+  - BCA Mobile
+  - PIN
+  - OTP
+  - QRIS
+  - OneKlik
+  - Flazz
+  - A Card Flazz
+  - keyBCA
+  - Sakuku
+  - haloBCA
+
+# Easy-negative themes: P2 drop if repair cost > value
+easy_negative_themes:
+  - Doraemon
+  - Aquaman
+  - Jujutsu Kaisen
+  - Hello Kitty
+  - Gudetama
+  - Batman
+  - Tazmania
+  - Joker
+  - Idul Fitri
+  - Bobo Flazz
+  - Klub Bobo
+  - Edisi

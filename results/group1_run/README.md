@@ -1,52 +1,55 @@
-# Group 1 翻译结果（供 GPT 分析）
+# Group 1 翻译结果（供 GPT / embedding 分析）
 
-第 1 组（`q_000001`）印尼语 → MSA 翻译流水线输出，2026-07-06 运行。
+## 推荐用于 embedding 的文件
 
-## 推荐阅读顺序
+**`cluster_retrieval_intent_eval_msa_repaired_partial.json`**（4935 negatives，query+positive 通过）
 
-1. **`reeval_current_rules_summary.json`** — 用**当前 main 规则**对同一批译文重评（无需重调 Kimi）
-2. **`gpt_analysis_summary.json`** — 旧规则下的原始统计（56.4% 通过率，供对比）
-3. **`cluster_retrieval_intent_eval_msa_partial.json`** — **可用于 embedding 实验**的 partial eval
-4. **`failed_after_reeval.jsonl`** — 重评后仍失败的 188 条
-5. **`cluster_retrieval_intent_eval_msa_debug.jsonl`** — 完整 debug（~3MB）
+备选：`cluster_retrieval_intent_eval_msa_partial_v2.json`（4786 negatives，规则修复后、未做 Kimi repair）
 
-## 关键数字对比
+## 流水线阶段与通过率
 
-| 指标 | 旧规则（首次 run） | 当前规则重评（同批译文） |
-|------|-------------------|-------------------------|
-| 通过率 | 56.4% (2794/4956) | **96.2% (4768/4956)** |
-| strict eval | 不可用 `[]` | 仍不可用（188 条失败） |
-| partial eval | 无 | **可用**（query+positive 通过，4766 negatives） |
+| 阶段 | 通过 | 说明 |
+|------|------|------|
+| 旧规则首次 run | 56.4% | QA 误杀为主 |
+| 当前规则重评（无重翻） | **96.2%** | 同批译文 |
+| 规则增强后重评 | **96.6%** | ATM/KTP/双极性等 |
+| 定点 repair 后 | **+149 negatives** | 160 条送修，169 接受，19 丢弃 |
 
-结论：**大量失败是 QA 误杀，不是 Kimi 整体翻错。**
+## 定点 repair 结果（`repair_summary.json`）
 
-## 文件说明
+```json
+{
+  "failed_before": 188,
+  "rule_false_positive": 28,
+  "sent_to_repair": 160,
+  "repair_accepted": 169,
+  "repair_failed": 19,
+  "dropped": 19
+}
+```
+
+- **P0**：160 条（占位符/产品名丢失/核心实体）
+- **RULE**：28 条（ATM/KTP 合理阿语化、双极性同句）→ 重跑 QA 自动通过
+- **P2_DROP**：repair 仍失败的 19 条 negative 丢弃
+
+## 文件索引
 
 | 文件 | 用途 |
 |------|------|
-| `reeval_current_rules_summary.json` | 重评汇总：错误分布、partial 是否可用 |
-| `cluster_retrieval_intent_eval_msa_partial.json` | partial eval JSON（embedding 先用这个） |
-| `failed_after_reeval.jsonl` | 重评后仍失败 item，供定点 repair |
-| `qa_report.json` | 首次 run 的 group QA（旧规则） |
-| `cluster_retrieval_intent_eval_msa_debug.jsonl` | 完整 idn/msa/qa |
-| `cluster_retrieval_intent_eval_msa.json` | strict eval（空 `[]`） |
+| `cluster_retrieval_intent_eval_msa_repaired_partial.json` | **embedding 主输入** |
+| `failed_after_reeval_triage.jsonl` | 188 条 triage（P0/RULE） |
+| `repaired_items.jsonl` | repair 成功项 |
+| `dropped_items.jsonl` | 丢弃项 |
+| `repair_summary.json` / `merge_summary.json` | 汇总 |
+| `cluster_retrieval_intent_eval_msa_debug.jsonl` | 完整 debug |
 
-## 重评命令（本地复现）
+## 复现命令
 
 ```bash
 cd translate
-python3 scripts/reevaluate_debug_with_current_qa.py \
-  --debug ../results/group1_run/cluster_retrieval_intent_eval_msa_debug.jsonl \
-  --summary-out ../results/group1_run/reeval_current_rules_summary.json \
-  --partial-out ../results/group1_run/cluster_retrieval_intent_eval_msa_partial.json \
-  --failed-out ../results/group1_run/failed_after_reeval.jsonl
-```
-
-## 给 GPT 的分析 prompt 示例
-
-```
-请对比 results/group1_run/ 下：
-- gpt_analysis_summary.json（旧规则 56%）
-- reeval_current_rules_summary.json（新规则 96%）
-说明哪些失败是规则误杀、哪些是真翻译问题，并读 failed_after_reeval.jsonl 给出 repair 建议。
+python3 scripts/run_targeted_repair.py \
+  --failed ../results/group1_run/failed_after_reeval.jsonl \
+  --partial ../results/group1_run/cluster_retrieval_intent_eval_msa_partial_v2.json \
+  --output-dir ../results/group1_run \
+  --concurrency 8
 ```

@@ -118,6 +118,42 @@
       "recall@3": 0.7838,
       "recall@5": 0.8378,
       "eval_sec": 174.82
+    },
+    {
+      "benchmark": "gte_multimode",
+      "model": "gte_multilingual_base",
+      "mode": "dense",
+      "recall@1": 0.5135,
+      "recall@3": 0.6486,
+      "recall@5": 0.7297,
+      "eval_sec": 41.71
+    },
+    {
+      "benchmark": "gte_multimode",
+      "model": "gte_multilingual_base",
+      "mode": "sparse",
+      "recall@1": 0.3243,
+      "recall@3": 0.5405,
+      "recall@5": 0.6216,
+      "eval_sec": 60.75
+    },
+    {
+      "benchmark": "gte_multimode",
+      "model": "gte_multilingual_base",
+      "mode": "hybrid",
+      "recall@1": 0.3514,
+      "recall@3": 0.5405,
+      "recall@5": 0.5946,
+      "eval_sec": 99.17
+    },
+    {
+      "benchmark": "qwen3_4b",
+      "model": "qwen3_embedding_4b",
+      "mode": "dense",
+      "recall@1": 0.5135,
+      "recall@3": 0.7838,
+      "recall@5": 0.8378,
+      "eval_sec": 342.25
     }
   ]
 }

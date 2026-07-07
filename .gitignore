@@ -8,6 +8,9 @@ miniconda3/
 translate/output/
 *.log
 
+# Embedding score caches (large, reproducible)
+pingce_org/output/reports/score_cache*/
+
 # Python
 __pycache__/
 *.py[cod]

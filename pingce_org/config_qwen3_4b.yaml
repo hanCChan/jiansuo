@@ -1,0 +1,28 @@
+# Qwen3-Embedding-4B dense retrieval on MSA eval set
+#
+# Usage:
+#   ./run_eval_qwen3_4b.sh
+#   ./run_eval_qwen3_4b.sh --no-cache
+
+paths:
+  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
+
+embedding:
+  device: "cuda"
+  batch_size: 32
+
+eval:
+  input_json: "../results/full_run/cluster_retrieval_intent_eval_msa_full.json"
+  device: "cuda:0"
+  batch_size: 32
+  report_dir: "./output/reports"
+  report_file: "intent_retrieval_eval_msa_qwen3_4b.json"
+  cache_dir: "./output/reports/score_cache_qwen3_4b"
+
+  models:
+    qwen3_embedding_4b:
+      path: "/new_nfs/models/Qwen__Qwen3-Embedding-4B"
+      backend: dense
+      use_fp16: true
+      query_style: qwen3_prompt
+      modes: [dense]

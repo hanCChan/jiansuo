@@ -261,6 +261,11 @@ def main() -> None:
                 "hybrid": "weighted dense+sparse+colbert (see hybrid_weights)",
                 "dense+sparse": "weighted dense+sparse only",
             },
+            "gte": {
+                "dense": "GTE dense cosine",
+                "sparse": "GTE sparse token overlap",
+                "hybrid": "dense * w_d + sparse * w_s",
+            },
             "dense": {"dense": "SentenceTransformer dense cosine similarity"},
         },
         "models": {},

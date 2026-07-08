@@ -1,0 +1,264 @@
+# MSA FAQ retrieval ablation study — prompt / hybrid weight grid
+#
+# GPU plan (run_ablation_4gpu.sh):
+#   GPU4 -> Qwen3-4B prompt ablations (4)
+#   GPU5 -> Qwen3-0.6B + E5 prompt ablations (4)
+#   GPU6 -> BGE-M3 hybrid weight grid (6)
+#   GPU7 -> GTE hybrid sparse weight grid (5)
+
+paths:
+  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
+
+embedding:
+  device: "cuda"
+  batch_size: 64
+
+eval:
+  input_json: "../results/full_run/cluster_retrieval_intent_eval_msa_full.json"
+  device: "cuda:0"
+  batch_size: 64
+  report_dir: "./output/reports"
+  report_file: "intent_retrieval_eval_msa_ablation.json"
+  cache_dir: "./output/reports/score_cache_ablation"
+
+  models:
+    # ---- GPU4: Qwen3-4B prompt ablation ----
+    qwen3_4b_default:
+      path: "/new_nfs/models/Qwen__Qwen3-Embedding-4B"
+      backend: dense
+      use_fp16: true
+      query_style: qwen3_prompt
+      ablation_label: "P0 default web-search instruct"
+      modes: [dense]
+
+    qwen3_4b_faq_en:
+      path: "/new_nfs/models/Qwen__Qwen3-Embedding-4B"
+      backend: dense
+      use_fp16: true
+      query_style: qwen3_custom
+      ablation_label: "P0 FAQ English instruct (long)"
+      task_description: >-
+        Given a user question in Modern Standard Arabic about BCA banking
+        customer-service FAQs, retrieve the FAQ question with the same user
+        intent. Pay special attention to product names, banking entities, and
+        action polarity such as block vs unblock, activate vs deactivate,
+        PIN vs password vs OTP.
+      modes: [dense]
+
+    qwen3_4b_faq_ar:
+      path: "/new_nfs/models/Qwen__Qwen3-Embedding-4B"
+      backend: dense
+      use_fp16: true
+      query_style: qwen3_custom
+      ablation_label: "P0 FAQ Arabic instruct"
+      task_description: >-
+        المهمة: بالنظر إلى سؤال عميل باللغة العربية الفصحى عن خدمات بنك BCA،
+        استرجع سؤال الأسئلة الشائعة المطابق في النية. انتبه إلى أسماء المنتجات
+        والكيانات المصرفية والفرق بين الحظر وفك الحظر، والتفعيل والإيقاف،
+        وPIN وOTP وكلمة المرور.
+      modes: [dense]
+
+    qwen3_4b_no_instruct:
+      path: "/new_nfs/models/Qwen__Qwen3-Embedding-4B"
+      backend: dense
+      use_fp16: true
+      query_style: qwen3_plain
+      ablation_label: "P0 no instruct baseline"
+      modes: [dense]
+
+    # ---- GPU5: Qwen3-0.6B + E5 prompt ablation ----
+    qwen3_06b_faq_en:
+      path: "/data1/hcc/jiansuo/model/Qwen3-Embedding-0.6B"
+      backend: dense
+      use_fp16: true
+      query_style: qwen3_custom
+      ablation_label: "P1 Qwen3-0.6B FAQ English instruct"
+      task_description: >-
+        Given a user question in Modern Standard Arabic about BCA banking
+        customer-service FAQs, retrieve the FAQ question with the same user
+        intent. Pay special attention to product names, banking entities, and
+        action polarity such as block vs unblock, activate vs deactivate,
+        PIN vs password vs OTP.
+      modes: [dense]
+
+    e5_current:
+      path: "/data1/hcc/jiansuo/model/multilingual-e5-large-instruct"
+      backend: dense
+      use_fp16: true
+      query_style: e5_instruct
+      ablation_label: "P2 E5 current MSA FAQ instruct"
+      task_description: "Given a user question in Modern Standard Arabic, retrieve the matching FAQ question"
+      modes: [dense]
+
+    e5_enhanced:
+      path: "/data1/hcc/jiansuo/model/multilingual-e5-large-instruct"
+      backend: dense
+      use_fp16: true
+      query_style: e5_instruct
+      ablation_label: "P2 E5 enhanced banking FAQ instruct"
+      task_description: >-
+        Given a user question in Modern Standard Arabic about BCA banking services,
+        retrieve the FAQ question with the same customer intent. Pay attention to
+        product names and action polarity.
+      modes: [dense]
+
+    e5_short:
+      path: "/data1/hcc/jiansuo/model/multilingual-e5-large-instruct"
+      backend: dense
+      use_fp16: true
+      query_style: e5_instruct
+      ablation_label: "P2 E5 short FAQ instruct"
+      task_description: "Retrieve the matching Arabic banking FAQ question."
+      modes: [dense]
+
+    # ---- GPU6: BGE-M3 hybrid weight grid ----
+    bge_hybrid_d80_s10_c10:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [0.8, 0.1, 0.1]
+      ablation_label: "P1 BGE hybrid d0.8 s0.1 c0.1"
+      modes: [hybrid]
+
+    bge_hybrid_d70_s10_c20:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [0.7, 0.1, 0.2]
+      ablation_label: "P1 BGE hybrid d0.7 s0.1 c0.2"
+      modes: [hybrid]
+
+    bge_hybrid_d70_s05_c25:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [0.7, 0.05, 0.25]
+      ablation_label: "P1 BGE hybrid d0.7 s0.05 c0.25"
+      modes: [hybrid]
+
+    bge_hybrid_d60_s10_c30:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [0.6, 0.1, 0.3]
+      ablation_label: "P1 BGE hybrid d0.6 s0.1 c0.3"
+      modes: [hybrid]
+
+    bge_hybrid_d90_s05_c05:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [0.9, 0.05, 0.05]
+      ablation_label: "P1 BGE hybrid d0.9 s0.05 c0.05"
+      modes: [hybrid]
+
+    bge_hybrid_d100_s00_c00:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [1.0, 0.0, 0.0]
+      ablation_label: "P1 BGE hybrid d1.0 s0.0 c0.0 (dense-only via hybrid path)"
+      modes: [hybrid]
+
+    bge_hybrid_baseline:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [0.4, 0.2, 0.4]
+      ablation_label: "baseline BGE hybrid d0.4 s0.2 c0.4"
+      modes: [hybrid]
+
+    # ---- GPU7: GTE hybrid sparse weight grid ----
+    gte_hybrid_s00:
+      path: "/new_nfs/models/gte-multilingual-base"
+      backend: gte
+      use_fp16: true
+      max_length: 8192
+      hybrid_dense_weight: 1.0
+      hybrid_sparse_weight: 0.0
+      ablation_label: "P1 GTE hybrid sparse=0.0"
+      modes: [hybrid]
+
+    gte_hybrid_s05:
+      path: "/new_nfs/models/gte-multilingual-base"
+      backend: gte
+      use_fp16: true
+      max_length: 8192
+      hybrid_dense_weight: 1.0
+      hybrid_sparse_weight: 0.05
+      ablation_label: "P1 GTE hybrid sparse=0.05"
+      modes: [hybrid]
+
+    gte_hybrid_s10:
+      path: "/new_nfs/models/gte-multilingual-base"
+      backend: gte
+      use_fp16: true
+      max_length: 8192
+      hybrid_dense_weight: 1.0
+      hybrid_sparse_weight: 0.1
+      ablation_label: "P1 GTE hybrid sparse=0.1 (official default)"
+      modes: [hybrid]
+
+    gte_hybrid_s20:
+      path: "/new_nfs/models/gte-multilingual-base"
+      backend: gte
+      use_fp16: true
+      max_length: 8192
+      hybrid_dense_weight: 1.0
+      hybrid_sparse_weight: 0.2
+      ablation_label: "P1 GTE hybrid sparse=0.2"
+      modes: [hybrid]
+
+    gte_hybrid_s30:
+      path: "/new_nfs/models/gte-multilingual-base"
+      backend: gte
+      use_fp16: true
+      max_length: 8192
+      hybrid_dense_weight: 1.0
+      hybrid_sparse_weight: 0.3
+      ablation_label: "baseline GTE hybrid sparse=0.3"
+      modes: [hybrid]
+
+  gpu_plan:
+    - gpu: 4
+      models:
+        - qwen3_4b_default
+        - qwen3_4b_faq_en
+        - qwen3_4b_faq_ar
+        - qwen3_4b_no_instruct
+    - gpu: 5
+      models:
+        - qwen3_06b_faq_en
+        - e5_current
+        - e5_enhanced
+        - e5_short
+    - gpu: 6
+      models:
+        - bge_hybrid_d80_s10_c10
+        - bge_hybrid_d70_s10_c20
+        - bge_hybrid_d70_s05_c25
+        - bge_hybrid_d60_s10_c30
+        - bge_hybrid_d90_s05_c05
+        - bge_hybrid_d100_s00_c00
+        - bge_hybrid_baseline
+    - gpu: 7
+      models:
+        - gte_hybrid_s00
+        - gte_hybrid_s05
+        - gte_hybrid_s10
+        - gte_hybrid_s20
+        - gte_hybrid_s30

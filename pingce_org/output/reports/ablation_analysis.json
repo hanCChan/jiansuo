@@ -1,0 +1,1116 @@
+{
+  "leaderboard": [
+    {
+      "alias": "bge_hybrid_d60_s10_c30",
+      "ablation_label": "P1 BGE hybrid d0.6 s0.1 c0.3",
+      "backend": "bge_m3",
+      "mode": "hybrid",
+      "recall@1": 0.6486486486486487,
+      "recall@3": 0.8108108108108109,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 171.22,
+      "hybrid_weights": [
+        0.6,
+        0.1,
+        0.3
+      ],
+      "hybrid_sparse_weight": null,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "bge_hybrid_baseline",
+      "ablation_label": "baseline BGE hybrid d0.4 s0.2 c0.4",
+      "backend": "bge_m3",
+      "mode": "hybrid",
+      "recall@1": 0.6486486486486487,
+      "recall@3": 0.8108108108108109,
+      "recall@5": 0.8108108108108109,
+      "eval_sec": 130.37,
+      "hybrid_weights": [
+        0.4,
+        0.2,
+        0.4
+      ],
+      "hybrid_sparse_weight": null,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "bge_hybrid_d80_s10_c10",
+      "ablation_label": "P1 BGE hybrid d0.8 s0.1 c0.1",
+      "backend": "bge_m3",
+      "mode": "hybrid",
+      "recall@1": 0.6216216216216216,
+      "recall@3": 0.8108108108108109,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 174.46,
+      "hybrid_weights": [
+        0.8,
+        0.1,
+        0.1
+      ],
+      "hybrid_sparse_weight": null,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "bge_hybrid_d70_s10_c20",
+      "ablation_label": "P1 BGE hybrid d0.7 s0.1 c0.2",
+      "backend": "bge_m3",
+      "mode": "hybrid",
+      "recall@1": 0.6216216216216216,
+      "recall@3": 0.8108108108108109,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 184.25,
+      "hybrid_weights": [
+        0.7,
+        0.1,
+        0.2
+      ],
+      "hybrid_sparse_weight": null,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "bge_hybrid_d70_s05_c25",
+      "ablation_label": "P1 BGE hybrid d0.7 s0.05 c0.25",
+      "backend": "bge_m3",
+      "mode": "hybrid",
+      "recall@1": 0.6216216216216216,
+      "recall@3": 0.8108108108108109,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 172.15,
+      "hybrid_weights": [
+        0.7,
+        0.05,
+        0.25
+      ],
+      "hybrid_sparse_weight": null,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "bge_hybrid_d90_s05_c05",
+      "ablation_label": "P1 BGE hybrid d0.9 s0.05 c0.05",
+      "backend": "bge_m3",
+      "mode": "hybrid",
+      "recall@1": 0.5945945945945946,
+      "recall@3": 0.8108108108108109,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 136.53,
+      "hybrid_weights": [
+        0.9,
+        0.05,
+        0.05
+      ],
+      "hybrid_sparse_weight": null,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "bge_hybrid_d100_s00_c00",
+      "ablation_label": "P1 BGE hybrid d1.0 s0.0 c0.0 (dense-only via hybrid path)",
+      "backend": "bge_m3",
+      "mode": "hybrid",
+      "recall@1": 0.5675675675675675,
+      "recall@3": 0.7567567567567568,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 128.04,
+      "hybrid_weights": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "hybrid_sparse_weight": null,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "qwen3_4b_faq_en",
+      "ablation_label": "P0 FAQ English instruct (long)",
+      "backend": "dense",
+      "mode": "dense",
+      "recall@1": 0.5405405405405406,
+      "recall@3": 0.8108108108108109,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 327.26,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": null,
+      "query_style": "qwen3_custom",
+      "task_description": "Given a user question in Modern Standard Arabic about BCA banking customer-service FAQs, retrieve the FAQ question with the same user intent. Pay special attention to product names, banking entities, and action polarity such as block vs unblock, activate vs deactivate, PIN vs password vs OTP."
+    },
+    {
+      "alias": "e5_current",
+      "ablation_label": "P2 E5 current MSA FAQ instruct",
+      "backend": "dense",
+      "mode": "dense",
+      "recall@1": 0.5135135135135135,
+      "recall@3": 0.7837837837837838,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 84.96,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": null,
+      "query_style": "e5_instruct",
+      "task_description": "Given a user question in Modern Standard Arabic, retrieve the matching FAQ question"
+    },
+    {
+      "alias": "e5_short",
+      "ablation_label": "P2 E5 short FAQ instruct",
+      "backend": "dense",
+      "mode": "dense",
+      "recall@1": 0.5135135135135135,
+      "recall@3": 0.7837837837837838,
+      "recall@5": 0.8918918918918919,
+      "eval_sec": 86.48,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": null,
+      "query_style": "e5_instruct",
+      "task_description": "Retrieve the matching Arabic banking FAQ question."
+    },
+    {
+      "alias": "gte_hybrid_s00",
+      "ablation_label": "P1 GTE hybrid sparse=0.0",
+      "backend": "gte",
+      "mode": "hybrid",
+      "recall@1": 0.5135135135135135,
+      "recall@3": 0.6486486486486487,
+      "recall@5": 0.7297297297297297,
+      "eval_sec": 148.73,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": 0.0,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "e5_enhanced",
+      "ablation_label": "P2 E5 enhanced banking FAQ instruct",
+      "backend": "dense",
+      "mode": "dense",
+      "recall@1": 0.4864864864864865,
+      "recall@3": 0.8108108108108109,
+      "recall@5": 0.918918918918919,
+      "eval_sec": 89.83,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": null,
+      "query_style": "e5_instruct",
+      "task_description": "Given a user question in Modern Standard Arabic about BCA banking services, retrieve the FAQ question with the same customer intent. Pay attention to product names and action polarity."
+    },
+    {
+      "alias": "qwen3_4b_default",
+      "ablation_label": "P0 default web-search instruct",
+      "backend": "dense",
+      "mode": "dense",
+      "recall@1": 0.4864864864864865,
+      "recall@3": 0.7837837837837838,
+      "recall@5": 0.8378378378378378,
+      "eval_sec": 329.16,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": null,
+      "query_style": "qwen3_prompt",
+      "task_description": null
+    },
+    {
+      "alias": "qwen3_4b_faq_ar",
+      "ablation_label": "P0 FAQ Arabic instruct",
+      "backend": "dense",
+      "mode": "dense",
+      "recall@1": 0.4864864864864865,
+      "recall@3": 0.7567567567567568,
+      "recall@5": 0.8108108108108109,
+      "eval_sec": 321.18,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": null,
+      "query_style": "qwen3_custom",
+      "task_description": "المهمة: بالنظر إلى سؤال عميل باللغة العربية الفصحى عن خدمات بنك BCA، استرجع سؤال الأسئلة الشائعة المطابق في النية. انتبه إلى أسماء المنتجات والكيانات المصرفية والفرق بين الحظر وفك الحظر، والتفعيل والإيقاف، وPIN وOTP وكلمة المرور."
+    },
+    {
+      "alias": "qwen3_4b_no_instruct",
+      "ablation_label": "P0 no instruct baseline",
+      "backend": "dense",
+      "mode": "dense",
+      "recall@1": 0.4864864864864865,
+      "recall@3": 0.7567567567567568,
+      "recall@5": 0.8918918918918919,
+      "eval_sec": 312.94,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": null,
+      "query_style": "qwen3_plain",
+      "task_description": null
+    },
+    {
+      "alias": "qwen3_06b_faq_en",
+      "ablation_label": "P1 Qwen3-0.6B FAQ English instruct",
+      "backend": "dense",
+      "mode": "dense",
+      "recall@1": 0.43243243243243246,
+      "recall@3": 0.7297297297297297,
+      "recall@5": 0.7567567567567568,
+      "eval_sec": 161.24,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": null,
+      "query_style": "qwen3_custom",
+      "task_description": "Given a user question in Modern Standard Arabic about BCA banking customer-service FAQs, retrieve the FAQ question with the same user intent. Pay special attention to product names, banking entities, and action polarity such as block vs unblock, activate vs deactivate, PIN vs password vs OTP."
+    },
+    {
+      "alias": "gte_hybrid_s05",
+      "ablation_label": "P1 GTE hybrid sparse=0.05",
+      "backend": "gte",
+      "mode": "hybrid",
+      "recall@1": 0.40540540540540543,
+      "recall@3": 0.5945945945945946,
+      "recall@5": 0.6486486486486487,
+      "eval_sec": 159.87,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": 0.05,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "gte_hybrid_s10",
+      "ablation_label": "P1 GTE hybrid sparse=0.1 (official default)",
+      "backend": "gte",
+      "mode": "hybrid",
+      "recall@1": 0.40540540540540543,
+      "recall@3": 0.5675675675675675,
+      "recall@5": 0.5945945945945946,
+      "eval_sec": 160.76,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": 0.1,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "gte_hybrid_s20",
+      "ablation_label": "P1 GTE hybrid sparse=0.2",
+      "backend": "gte",
+      "mode": "hybrid",
+      "recall@1": 0.35135135135135137,
+      "recall@3": 0.5405405405405406,
+      "recall@5": 0.5945945945945946,
+      "eval_sec": 139.35,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": 0.2,
+      "query_style": null,
+      "task_description": null
+    },
+    {
+      "alias": "gte_hybrid_s30",
+      "ablation_label": "baseline GTE hybrid sparse=0.3",
+      "backend": "gte",
+      "mode": "hybrid",
+      "recall@1": 0.35135135135135137,
+      "recall@3": 0.5405405405405406,
+      "recall@5": 0.5945945945945946,
+      "eval_sec": 141.62,
+      "hybrid_weights": null,
+      "hybrid_sparse_weight": 0.3,
+      "query_style": null,
+      "task_description": null
+    }
+  ],
+  "badcases": {
+    "reference": "bge_hybrid_baseline",
+    "pairwise_diff_count": 151,
+    "pairwise_samples": [
+      {
+        "cluster_id": 0,
+        "pattern": "bge_hybrid_baseline_miss_qwen3_4b_default_hit",
+        "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟",
+        "ref_rank": 7,
+        "cur_rank": 1
+      },
+      {
+        "cluster_id": 3,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_default_miss",
+        "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 4,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_default_miss",
+        "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟",
+        "ref_rank": 1,
+        "cur_rank": 3
+      },
+      {
+        "cluster_id": 8,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_default_miss",
+        "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟",
+        "ref_rank": 1,
+        "cur_rank": 6
+      },
+      {
+        "cluster_id": 12,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_default_miss",
+        "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 15,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_default_miss",
+        "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 16,
+        "pattern": "bge_hybrid_baseline_miss_qwen3_4b_default_hit",
+        "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟",
+        "ref_rank": 2,
+        "cur_rank": 1
+      },
+      {
+        "cluster_id": 23,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_default_miss",
+        "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟",
+        "ref_rank": 1,
+        "cur_rank": 5
+      },
+      {
+        "cluster_id": 31,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_default_miss",
+        "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 32,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_default_miss",
+        "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 4,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_en_miss",
+        "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟",
+        "ref_rank": 1,
+        "cur_rank": 5
+      },
+      {
+        "cluster_id": 8,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_en_miss",
+        "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟",
+        "ref_rank": 1,
+        "cur_rank": 28
+      },
+      {
+        "cluster_id": 10,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_en_miss",
+        "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 12,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_en_miss",
+        "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 16,
+        "pattern": "bge_hybrid_baseline_miss_qwen3_4b_faq_en_hit",
+        "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟",
+        "ref_rank": 2,
+        "cur_rank": 1
+      },
+      {
+        "cluster_id": 18,
+        "pattern": "bge_hybrid_baseline_miss_qwen3_4b_faq_en_hit",
+        "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟",
+        "ref_rank": 3,
+        "cur_rank": 1
+      },
+      {
+        "cluster_id": 23,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_en_miss",
+        "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟",
+        "ref_rank": 1,
+        "cur_rank": 8
+      },
+      {
+        "cluster_id": 30,
+        "pattern": "bge_hybrid_baseline_miss_qwen3_4b_faq_en_hit",
+        "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟",
+        "ref_rank": 2,
+        "cur_rank": 1
+      },
+      {
+        "cluster_id": 31,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_en_miss",
+        "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 33,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_en_miss",
+        "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 4,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_ar_miss",
+        "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟",
+        "ref_rank": 1,
+        "cur_rank": 4
+      },
+      {
+        "cluster_id": 5,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_ar_miss",
+        "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 8,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_ar_miss",
+        "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟",
+        "ref_rank": 1,
+        "cur_rank": 37
+      },
+      {
+        "cluster_id": 12,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_ar_miss",
+        "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟",
+        "ref_rank": 1,
+        "cur_rank": 7
+      },
+      {
+        "cluster_id": 16,
+        "pattern": "bge_hybrid_baseline_miss_qwen3_4b_faq_ar_hit",
+        "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟",
+        "ref_rank": 2,
+        "cur_rank": 1
+      },
+      {
+        "cluster_id": 18,
+        "pattern": "bge_hybrid_baseline_miss_qwen3_4b_faq_ar_hit",
+        "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟",
+        "ref_rank": 3,
+        "cur_rank": 1
+      },
+      {
+        "cluster_id": 22,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_ar_miss",
+        "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 23,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_ar_miss",
+        "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟",
+        "ref_rank": 1,
+        "cur_rank": 12
+      },
+      {
+        "cluster_id": 31,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_ar_miss",
+        "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      },
+      {
+        "cluster_id": 33,
+        "pattern": "bge_hybrid_baseline_hit_qwen3_4b_faq_ar_miss",
+        "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟",
+        "ref_rank": 1,
+        "cur_rank": 2
+      }
+    ],
+    "universal_miss": [
+      {
+        "cluster_id": 2,
+        "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+      },
+      {
+        "cluster_id": 6,
+        "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+      },
+      {
+        "cluster_id": 11,
+        "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+      },
+      {
+        "cluster_id": 14,
+        "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+      },
+      {
+        "cluster_id": 17,
+        "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+      },
+      {
+        "cluster_id": 26,
+        "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+      },
+      {
+        "cluster_id": 27,
+        "query": "ما هي ساعات عمل فرع BCA؟"
+      },
+      {
+        "cluster_id": 28,
+        "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+      }
+    ],
+    "per_query_hit_counts": {
+      "0": {
+        "hit": [
+          "qwen3_4b_default"
+        ],
+        "miss": 19
+      },
+      "1": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline"
+        ],
+        "miss": 9
+      },
+      "3": {
+        "hit": [
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_06b_faq_en",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00"
+        ],
+        "miss": 9
+      },
+      "4": {
+        "hit": [
+          "e5_current",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 7
+      },
+      "5": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10"
+        ],
+        "miss": 5
+      },
+      "7": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10"
+        ],
+        "miss": 2
+      },
+      "8": {
+        "hit": [
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline"
+        ],
+        "miss": 13
+      },
+      "9": {
+        "hit": [
+          "qwen3_06b_faq_en",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00"
+        ],
+        "miss": 13
+      },
+      "10": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00"
+        ],
+        "miss": 6
+      },
+      "12": {
+        "hit": [
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 8
+      },
+      "13": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 1
+      },
+      "15": {
+        "hit": [
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00"
+        ],
+        "miss": 7
+      },
+      "16": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_short",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 8
+      },
+      "18": {
+        "hit": [
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct"
+        ],
+        "miss": 17
+      },
+      "19": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 0
+      },
+      "20": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 0
+      },
+      "21": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 1
+      },
+      "22": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 1
+      },
+      "23": {
+        "hit": [
+          "e5_enhanced",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 13
+      },
+      "24": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00"
+        ],
+        "miss": 4
+      },
+      "25": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 5
+      },
+      "29": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 0
+      },
+      "30": {
+        "hit": [
+          "qwen3_4b_faq_en",
+          "qwen3_4b_no_instruct",
+          "e5_short"
+        ],
+        "miss": 17
+      },
+      "31": {
+        "hit": [
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline"
+        ],
+        "miss": 10
+      },
+      "32": {
+        "hit": [
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_baseline"
+        ],
+        "miss": 12
+      },
+      "33": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_no_instruct",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 3
+      },
+      "34": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline"
+        ],
+        "miss": 5
+      },
+      "35": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00",
+          "gte_hybrid_s05",
+          "gte_hybrid_s10",
+          "gte_hybrid_s20",
+          "gte_hybrid_s30"
+        ],
+        "miss": 0
+      },
+      "36": {
+        "hit": [
+          "qwen3_4b_default",
+          "qwen3_4b_faq_en",
+          "qwen3_4b_faq_ar",
+          "qwen3_4b_no_instruct",
+          "qwen3_06b_faq_en",
+          "e5_current",
+          "e5_enhanced",
+          "e5_short",
+          "bge_hybrid_d80_s10_c10",
+          "bge_hybrid_d70_s10_c20",
+          "bge_hybrid_d70_s05_c25",
+          "bge_hybrid_d60_s10_c30",
+          "bge_hybrid_d90_s05_c05",
+          "bge_hybrid_d100_s00_c00",
+          "bge_hybrid_baseline",
+          "gte_hybrid_s00"
+        ],
+        "miss": 4
+      }
+    }
+  },
+  "bge_mode_top10_check": {
+    "dense_vs_colbert": {
+      "same_top10_count": 0,
+      "same_top1_count": 0,
+      "total_queries": 37,
+      "same_top10_ratio": 0.0,
+      "same_top1_ratio": 0.0,
+      "sample_diffs": []
+    },
+    "dense_vs_dense+sparse": {
+      "same_top10_count": 0,
+      "same_top1_count": 0,
+      "total_queries": 37,
+      "same_top10_ratio": 0.0,
+      "same_top1_ratio": 0.0,
+      "sample_diffs": []
+    },
+    "colbert_vs_dense+sparse": {
+      "same_top10_count": 0,
+      "same_top1_count": 0,
+      "total_queries": 37,
+      "same_top10_ratio": 0.0,
+      "same_top1_ratio": 0.0,
+      "sample_diffs": []
+    }
+  }
+}

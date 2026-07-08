@@ -50,19 +50,28 @@ def load_eval(path: Path) -> list[dict]:
     return data
 
 
-def metrics_from_scores(scores: np.ndarray, labels: list[int]) -> dict:
-    """Return flat retrieval metrics for one query."""
+def metrics_from_scores(scores: np.ndarray, labels: list[int], *, top_k: int = 10) -> dict:
+    """Return flat retrieval metrics and optional top-k detail for one query."""
     order = np.argsort(-scores)
 
     pos_idx = [i for i, y in enumerate(labels) if y == 1]
     pos_ranks = [int(np.where(order == pi)[0][0]) + 1 for pi in pos_idx]
     pos_rank_arr = np.asarray(pos_ranks, dtype=np.float32)
+    best_rank = int(pos_ranks[0]) if pos_ranks else None
 
-    return {
+    row = {
         "recall@1": float(np.mean(pos_rank_arr <= 1)) if pos_ranks else 0.0,
         "recall@3": float(np.mean(pos_rank_arr <= 3)) if pos_ranks else 0.0,
         "recall@5": float(np.mean(pos_rank_arr <= 5)) if pos_ranks else 0.0,
+        "pos_rank": best_rank,
+        "hit@1": bool(best_rank is not None and best_rank <= 1),
+        "hit@3": bool(best_rank is not None and best_rank <= 3),
+        "hit@5": bool(best_rank is not None and best_rank <= 5),
     }
+    k = min(top_k, len(scores))
+    row["topk_indices"] = order[:k].tolist()
+    row["topk_scores"] = scores[order[:k]].astype(np.float32).tolist()
+    return row
 
 
 METRIC_KEYS = ("recall@1", "recall@3", "recall@5")
@@ -78,6 +87,7 @@ def eval_backend_on_dataset(
     *,
     cache_dir: Path | None = None,
     cache_tag: str = "",
+    with_retrieval_detail: bool = False,
 ) -> list[dict]:
     rows: list[dict] = []
     for i, item in enumerate(data):
@@ -100,6 +110,20 @@ def eval_backend_on_dataset(
         row = metrics_from_scores(scores, labels)
         row["cluster_id"] = i
         row["query"] = item["query"]
+        if with_retrieval_detail:
+            row["gold_text"] = item["positive"][0]
+            top_idx = row.pop("topk_indices")
+            top_scores = row.pop("topk_scores")
+            row["top10_indices"] = top_idx
+            row["top10_scores"] = top_scores
+            row["top10_texts"] = [candidates[j] for j in top_idx]
+        else:
+            row.pop("topk_indices", None)
+            row.pop("topk_scores", None)
+            row.pop("pos_rank", None)
+            row.pop("hit@1", None)
+            row.pop("hit@3", None)
+            row.pop("hit@5", None)
         rows.append(row)
     return rows
 
@@ -139,11 +163,29 @@ def resolve_model_device(model_cfg: dict, default_device: str) -> str:
     return default_device
 
 
-def eval_cache_tag(eval_path: Path, alias: str, mode: str, device: str, model_path: str) -> str:
+def eval_cache_tag(
+    eval_path: Path,
+    alias: str,
+    mode: str,
+    device: str,
+    model_path: str,
+    model_cfg: dict | None = None,
+) -> str:
     stat = eval_path.stat()
+    cfg_bits = ""
+    if model_cfg:
+        cfg_keys = (
+            "query_style",
+            "task_description",
+            "hybrid_weights",
+            "hybrid_dense_weight",
+            "hybrid_sparse_weight",
+            "gemma_task",
+        )
+        cfg_bits = "|".join(f"{k}={model_cfg.get(k)}" for k in cfg_keys if model_cfg.get(k) is not None)
     digest = hashlib.sha1(
         f"{eval_path.resolve()}|{stat.st_mtime_ns}|{stat.st_size}|"
-        f"{alias}|{mode}|{device}|{model_path}".encode()
+        f"{alias}|{mode}|{device}|{model_path}|{cfg_bits}".encode()
     ).hexdigest()[:12]
     return f"{alias}__{mode}__{digest}"
 
@@ -209,6 +251,11 @@ def main() -> None:
         "--report-file",
         default=None,
         help="override report output filename under report_dir",
+    )
+    parser.add_argument(
+        "--retrieval-detail",
+        action="store_true",
+        help="include per-query top10 retrieval detail in report",
     )
     args = parser.parse_args()
 
@@ -284,6 +331,11 @@ def main() -> None:
             "backend": model_cfg["backend"],
             "device": device,
             "configured_modes": model_cfg["modes"],
+            "ablation_label": model_cfg.get("ablation_label"),
+            "query_style": model_cfg.get("query_style"),
+            "task_description": model_cfg.get("task_description"),
+            "hybrid_weights": model_cfg.get("hybrid_weights"),
+            "hybrid_sparse_weight": model_cfg.get("hybrid_sparse_weight"),
             "modes": {},
         }
 
@@ -302,12 +354,15 @@ def main() -> None:
                     print(f"  reused cached model for {alias} / {mode}")
 
                 t1 = time.time()
-                cache_tag = eval_cache_tag(eval_path, alias, mode, device, model_cfg["path"])
+                cache_tag = eval_cache_tag(
+                    eval_path, alias, mode, device, model_cfg["path"], model_cfg
+                )
                 per_query = eval_backend_on_dataset(
                     data,
                     backend,
                     cache_dir=cache_dir,
                     cache_tag=cache_tag,
+                    with_retrieval_detail=args.retrieval_detail,
                 )
                 eval_sec = time.time() - t1
                 model_report["modes"][mode] = {

@@ -106,6 +106,32 @@ class DenseBackend(EmbeddingBackend):
                 dtype=np.float32,
             )
 
+        if self.query_style == "qwen3_custom":
+            prompt = f"Instruct: {self.task_description}\nQuery:"
+            return np.asarray(
+                self.model.encode(
+                    queries,
+                    batch_size=self.batch_size,
+                    show_progress_bar=False,
+                    convert_to_numpy=True,
+                    normalize_embeddings=True,
+                    prompt=prompt,
+                ),
+                dtype=np.float32,
+            )
+
+        if self.query_style == "qwen3_plain":
+            return np.asarray(
+                self.model.encode(
+                    queries,
+                    batch_size=self.batch_size,
+                    show_progress_bar=False,
+                    convert_to_numpy=True,
+                    normalize_embeddings=True,
+                ),
+                dtype=np.float32,
+            )
+
         formatted = [self._format_query(q) for q in queries]
         if self.query_style == "gemma_retrieval" and hasattr(self.model, "encode_query"):
             if len(formatted) == 1:

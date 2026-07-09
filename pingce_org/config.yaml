@@ -1,7 +1,6 @@
 paths:
   source_json: "../Qwen35-4B_en_test_intent_by_cluster_expressions.json"
   output_json: "./output/intent_eval.json"
-  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
   cluster_rules: "../question_cluster/prompts/cluster_rules.md"
   expand_prompt: "./prompts/expand_intent_expressions.md"
 

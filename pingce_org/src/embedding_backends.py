@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
+import os
+import pickle
 from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -35,9 +40,116 @@ class EmbeddingBackend(ABC):
     def score(self, query: str, candidates: list[str]) -> np.ndarray:
         raise NotImplementedError
 
+    def score_cluster_avg(
+        self, query: str, variant_groups: list[list[str]]
+    ) -> np.ndarray:
+        """Mean query-vs-variants score per group; default loops per group."""
+        if not variant_groups:
+            return np.asarray([], dtype=np.float32)
+        scores = np.empty(len(variant_groups), dtype=np.float32)
+        for i, variants in enumerate(variant_groups):
+            scores[i] = float(np.mean(self.score(query, variants)))
+        return scores
+
+    def encode_cluster_corpus(self, texts: list[str]) -> Any:
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement encode_cluster_corpus"
+        )
+
+    def score_cluster_avg_corpus(
+        self, query: str, group_sizes: list[int], corpus: Any
+    ) -> np.ndarray:
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement score_cluster_avg_corpus"
+        )
+
+    def corpus_cache_name(self) -> str:
+        return str(getattr(self, "mode", "default"))
+
     @abstractmethod
     def close(self) -> None:
         raise NotImplementedError
+
+
+def _mean_grouped_sims(
+    sims: np.ndarray, group_sizes: list[int]
+) -> np.ndarray:
+    scores = np.empty(len(group_sizes), dtype=np.float32)
+    offset = 0
+    for i, n in enumerate(group_sizes):
+        scores[i] = float(np.mean(sims[offset : offset + n]))
+        offset += n
+    return scores
+
+
+def resolve_cluster_score_workers(model_cfg: dict | None = None) -> int:
+    if model_cfg is not None and model_cfg.get("cluster_score_workers") is not None:
+        return max(1, int(model_cfg["cluster_score_workers"]))
+    env = os.environ.get("CLUSTER_SCORE_WORKERS")
+    if env:
+        return max(1, int(env))
+    cpu = os.cpu_count() or 8
+    return max(8, min(64, cpu // 4))
+
+
+def _parallel_float_map(scorer, size: int, workers: int) -> np.ndarray:
+    """Parallel index->float scoring for colbert/sparse CPU loops."""
+    out = np.empty(size, dtype=np.float32)
+    if size == 0:
+        return out
+    if workers <= 1 or size < workers * 4:
+        for i in range(size):
+            out[i] = scorer(i)
+        return out
+
+    # Avoid OpenMP oversubscription: one BLAS thread per worker thread.
+    if torch.get_num_threads() != 1:
+        torch.set_num_threads(1)
+
+    def _fill(start: int, end: int) -> None:
+        for i in range(start, end):
+            out[i] = scorer(i)
+
+    chunk = max(1, (size + workers - 1) // workers)
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = [
+            executor.submit(_fill, start, min(size, start + chunk))
+            for start in range(0, size, chunk)
+        ]
+        for fut in futures:
+            fut.result()
+    return out
+
+
+def load_corpus_cache(path: Path) -> Any | None:
+    if not path.is_file():
+        return None
+    with path.open("rb") as f:
+        return pickle.load(f)
+
+
+def save_corpus_cache(path: Path, corpus: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("wb") as f:
+        pickle.dump(corpus, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+@dataclass
+class BgeM3Corpus:
+    mode: str
+    dense: np.ndarray | None = None
+    lexical_weights: list | None = None
+    colbert_vecs: list | None = None
+    hybrid_weights: list[float] | None = None
+
+
+@dataclass
+class GteCorpus:
+    mode: str
+    dense: np.ndarray | None = None
+    token_weights: list | None = None
+    hybrid_dense_weight: float = 1.0
+    hybrid_sparse_weight: float = 0.3
 
 
 class DenseBackend(EmbeddingBackend):
@@ -197,6 +309,33 @@ class DenseBackend(EmbeddingBackend):
         doc_emb = _l2_normalize(self._encode_documents(candidates))
         return (query_emb @ doc_emb.T).reshape(-1).astype(np.float32)
 
+    def score_cluster_avg(
+        self, query: str, variant_groups: list[list[str]]
+    ) -> np.ndarray:
+        if not variant_groups:
+            return np.asarray([], dtype=np.float32)
+
+        query_emb = _l2_normalize(self._encode_queries([query]))
+        flat_variants: list[str] = []
+        group_sizes: list[int] = []
+        for group in variant_groups:
+            flat_variants.extend(group)
+            group_sizes.append(len(group))
+
+        doc_emb = _l2_normalize(self._encode_documents(flat_variants))
+        sims = (query_emb @ doc_emb.T).reshape(-1)
+        return _mean_grouped_sims(sims, group_sizes)
+
+    def encode_cluster_corpus(self, texts: list[str]) -> np.ndarray:
+        return _l2_normalize(self._encode_documents(texts))
+
+    def score_cluster_avg_corpus(
+        self, query: str, group_sizes: list[int], corpus: np.ndarray
+    ) -> np.ndarray:
+        query_emb = _l2_normalize(self._encode_queries([query]))
+        sims = (query_emb @ corpus.T).reshape(-1)
+        return _mean_grouped_sims(sims, group_sizes)
+
     def close(self) -> None:
         del self.model
 
@@ -228,6 +367,7 @@ class BgeM3Backend(EmbeddingBackend):
         self.hybrid_weights = list(model_cfg.get("hybrid_weights", [0.4, 0.2, 0.4]))
         self.max_length = int(model_cfg.get("max_length", 8192))
         self.pair_batch_size = int(model_cfg.get("pair_batch_size", 64))
+        self.cluster_score_workers = resolve_cluster_score_workers(model_cfg)
 
         resolved_device = _normalize_device(device)
         use_fp16 = bool(model_cfg.get("use_fp16", True))
@@ -241,6 +381,24 @@ class BgeM3Backend(EmbeddingBackend):
         if mode not in self.MODE_KEYS:
             raise ValueError(f"BgeM3Backend unsupported mode: {mode}")
         self.mode = mode
+
+    def _colbert_pair_sims(self, q_vec, c_vecs: list) -> np.ndarray:
+        workers = self.cluster_score_workers
+        return _parallel_float_map(
+            lambda i: float(self.model.colbert_score(q_vec, c_vecs[i])),
+            len(c_vecs),
+            workers,
+        )
+
+    def _lexical_pair_sims(self, q_lex, c_lex_list: list) -> np.ndarray:
+        workers = self.cluster_score_workers
+        return _parallel_float_map(
+            lambda i: float(
+                self.model.compute_lexical_matching_score(q_lex, c_lex_list[i])
+            ),
+            len(c_lex_list),
+            workers,
+        )
 
     def _encode_batch(
         self,
@@ -270,19 +428,13 @@ class BgeM3Backend(EmbeddingBackend):
         q_out = self._encode_batch([query], return_dense=False, return_sparse=True, return_colbert=False)
         c_out = self._encode_batch(candidates, return_dense=False, return_sparse=True, return_colbert=False)
         q_lex = q_out["lexical_weights"][0]
-        scores = np.empty(len(candidates), dtype=np.float32)
-        for i, c_lex in enumerate(c_out["lexical_weights"]):
-            scores[i] = float(self.model.compute_lexical_matching_score(q_lex, c_lex))
-        return scores
+        return self._lexical_pair_sims(q_lex, c_out["lexical_weights"])
 
     def _score_colbert(self, query: str, candidates: list[str]) -> np.ndarray:
         q_out = self._encode_batch([query], return_dense=False, return_sparse=False, return_colbert=True)
         c_out = self._encode_batch(candidates, return_dense=False, return_sparse=False, return_colbert=True)
         q_vec = q_out["colbert_vecs"][0]
-        scores = np.empty(len(candidates), dtype=np.float32)
-        for i, c_vec in enumerate(c_out["colbert_vecs"]):
-            scores[i] = float(self.model.colbert_score(q_vec, c_vec))
-        return scores
+        return self._colbert_pair_sims(q_vec, c_out["colbert_vecs"])
 
     def _score_hybrid_like(self, query: str, candidates: list[str], mode: str) -> np.ndarray:
         weights = self.hybrid_weights
@@ -317,6 +469,166 @@ class BgeM3Backend(EmbeddingBackend):
             return self._score_hybrid_like(query, candidates, self.mode)
         raise ValueError(f"unsupported BGE-M3 mode: {self.mode}")
 
+    def score_cluster_avg(
+        self, query: str, variant_groups: list[list[str]]
+    ) -> np.ndarray:
+        if not variant_groups:
+            return np.asarray([], dtype=np.float32)
+
+        flat_variants = [v for group in variant_groups for v in group]
+        group_sizes = [len(group) for group in variant_groups]
+
+        if self.mode == "dense":
+            q_out = self._encode_batch(
+                [query], return_dense=True, return_sparse=False, return_colbert=False
+            )
+            q = _l2_normalize(np.asarray(q_out["dense_vecs"], dtype=np.float32))
+            c_out = self._encode_batch(
+                flat_variants, return_dense=True, return_sparse=False, return_colbert=False
+            )
+            c = _l2_normalize(np.asarray(c_out["dense_vecs"], dtype=np.float32))
+            sims = (q @ c.T).reshape(-1)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if self.mode == "sparse":
+            q_out = self._encode_batch(
+                [query], return_dense=False, return_sparse=True, return_colbert=False
+            )
+            q_lex = q_out["lexical_weights"][0]
+            c_out = self._encode_batch(
+                flat_variants, return_dense=False, return_sparse=True, return_colbert=False
+            )
+            sims = self._lexical_pair_sims(q_lex, c_out["lexical_weights"])
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if self.mode == "colbert":
+            q_out = self._encode_batch(
+                [query], return_dense=False, return_sparse=False, return_colbert=True
+            )
+            q_vec = q_out["colbert_vecs"][0]
+            c_out = self._encode_batch(
+                flat_variants, return_dense=False, return_sparse=False, return_colbert=True
+            )
+            sims = self._colbert_pair_sims(q_vec, c_out["colbert_vecs"])
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if self.mode in {"hybrid", "dense+sparse"}:
+            weights = self.hybrid_weights
+            if self.mode == "dense+sparse":
+                d, s, _ = weights if len(weights) == 3 else (0.6, 0.4, 0.0)
+                weights = [float(d), float(s), 0.0]
+            sims = np.empty(len(flat_variants), dtype=np.float32)
+            for start in range(0, len(flat_variants), self.pair_batch_size):
+                chunk = flat_variants[start : start + self.pair_batch_size]
+                pairs = [[query, variant] for variant in chunk]
+                result = self.model.compute_score(
+                    pairs,
+                    max_passage_length=self.max_length,
+                    weights_for_different_modes=weights,
+                )
+                key = self.MODE_KEYS[self.mode]
+                chunk_scores = result[key]
+                sims[start : start + len(chunk)] = np.asarray(chunk_scores, dtype=np.float32)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        return super().score_cluster_avg(query, variant_groups)
+
+    def _hybrid_weights_for_mode(self) -> list[float]:
+        weights = self.hybrid_weights
+        if self.mode == "dense+sparse":
+            d, s, _ = weights if len(weights) == 3 else (0.6, 0.4, 0.0)
+            return [float(d), float(s), 0.0]
+        return [float(x) for x in weights]
+
+    def encode_cluster_corpus(self, texts: list[str]) -> BgeM3Corpus:
+        if self.mode == "dense":
+            out = self._encode_batch(
+                texts, return_dense=True, return_sparse=False, return_colbert=False
+            )
+            return BgeM3Corpus(
+                mode="dense",
+                dense=_l2_normalize(np.asarray(out["dense_vecs"], dtype=np.float32)),
+            )
+        if self.mode == "sparse":
+            out = self._encode_batch(
+                texts, return_dense=False, return_sparse=True, return_colbert=False
+            )
+            return BgeM3Corpus(mode="sparse", lexical_weights=out["lexical_weights"])
+        if self.mode == "colbert":
+            out = self._encode_batch(
+                texts, return_dense=False, return_sparse=False, return_colbert=True
+            )
+            return BgeM3Corpus(mode="colbert", colbert_vecs=out["colbert_vecs"])
+        if self.mode == "hybrid":
+            out = self._encode_batch(
+                texts, return_dense=True, return_sparse=True, return_colbert=True
+            )
+            return BgeM3Corpus(
+                mode="hybrid",
+                dense=_l2_normalize(np.asarray(out["dense_vecs"], dtype=np.float32)),
+                lexical_weights=out["lexical_weights"],
+                colbert_vecs=out["colbert_vecs"],
+                hybrid_weights=self._hybrid_weights_for_mode(),
+            )
+        if self.mode == "dense+sparse":
+            out = self._encode_batch(
+                texts, return_dense=True, return_sparse=True, return_colbert=False
+            )
+            return BgeM3Corpus(
+                mode="dense+sparse",
+                dense=_l2_normalize(np.asarray(out["dense_vecs"], dtype=np.float32)),
+                lexical_weights=out["lexical_weights"],
+                hybrid_weights=self._hybrid_weights_for_mode(),
+            )
+        raise ValueError(f"unsupported BGE-M3 corpus mode: {self.mode}")
+
+    def score_cluster_avg_corpus(
+        self, query: str, group_sizes: list[int], corpus: BgeM3Corpus
+    ) -> np.ndarray:
+        if corpus.mode == "dense":
+            q_out = self._encode_batch(
+                [query], return_dense=True, return_sparse=False, return_colbert=False
+            )
+            q = _l2_normalize(np.asarray(q_out["dense_vecs"], dtype=np.float32))
+            sims = (q @ corpus.dense.T).reshape(-1)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if corpus.mode == "sparse":
+            q_out = self._encode_batch(
+                [query], return_dense=False, return_sparse=True, return_colbert=False
+            )
+            q_lex = q_out["lexical_weights"][0]
+            sims = self._lexical_pair_sims(q_lex, corpus.lexical_weights)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if corpus.mode == "colbert":
+            q_out = self._encode_batch(
+                [query], return_dense=False, return_sparse=False, return_colbert=True
+            )
+            q_vec = q_out["colbert_vecs"][0]
+            sims = self._colbert_pair_sims(q_vec, corpus.colbert_vecs)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if corpus.mode in {"hybrid", "dense+sparse"}:
+            weights = corpus.hybrid_weights or self._hybrid_weights_for_mode()
+            return_colbert = corpus.mode == "hybrid"
+            q_out = self._encode_batch(
+                [query],
+                return_dense=True,
+                return_sparse=True,
+                return_colbert=return_colbert,
+            )
+            q_dense = _l2_normalize(np.asarray(q_out["dense_vecs"], dtype=np.float32))
+            sims = (weights[0] * (q_dense @ corpus.dense.T).reshape(-1)).astype(np.float32)
+            q_lex = q_out["lexical_weights"][0]
+            sims += weights[1] * self._lexical_pair_sims(q_lex, corpus.lexical_weights)
+            if return_colbert and weights[2]:
+                q_vec = q_out["colbert_vecs"][0]
+                sims += weights[2] * self._colbert_pair_sims(q_vec, corpus.colbert_vecs)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        raise ValueError(f"unsupported BGE-M3 corpus mode: {corpus.mode}")
+
     def close(self) -> None:
         del self.model
 
@@ -348,6 +660,7 @@ class GteBackend(EmbeddingBackend):
         self.max_length = int(model_cfg.get("max_length", 8192))
         self.hybrid_dense_weight = float(model_cfg.get("hybrid_dense_weight", 1.0))
         self.hybrid_sparse_weight = float(model_cfg.get("hybrid_sparse_weight", 0.3))
+        self.cluster_score_workers = resolve_cluster_score_workers(model_cfg)
 
         resolved_device = _normalize_device(device)
         use_fp16 = bool(model_cfg.get("use_fp16", True))
@@ -363,6 +676,16 @@ class GteBackend(EmbeddingBackend):
         if mode not in self.VALID_MODES:
             raise ValueError(f"GteBackend unsupported mode: {mode}")
         self.mode = mode
+
+    def _sparse_pair_sims(self, q_sparse, c_sparse_list: list) -> np.ndarray:
+        workers = self.cluster_score_workers
+        return _parallel_float_map(
+            lambda i: float(
+                self.model._compute_sparse_scores(q_sparse, c_sparse_list[i])
+            ),
+            len(c_sparse_list),
+            workers,
+        )
 
     def _encode_batch(
         self,
@@ -437,6 +760,88 @@ class GteBackend(EmbeddingBackend):
                 self.hybrid_dense_weight * dense + self.hybrid_sparse_weight * sparse
             ).astype(np.float32)
         raise ValueError(f"unsupported GTE mode: {self.mode}")
+
+    def score_cluster_avg(
+        self, query: str, variant_groups: list[list[str]]
+    ) -> np.ndarray:
+        if not variant_groups:
+            return np.asarray([], dtype=np.float32)
+
+        flat_variants = [v for group in variant_groups for v in group]
+        group_sizes = [len(group) for group in variant_groups]
+
+        if self.mode == "dense":
+            q = _l2_normalize(self._encode_dense([query]))
+            c = _l2_normalize(self._encode_dense(flat_variants))
+            sims = (q @ c.T).reshape(-1)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if self.mode == "sparse":
+            q_sparse = self._encode_sparse([query])[0]
+            c_sparse = self._encode_sparse(flat_variants)
+            sims = np.empty(len(flat_variants), dtype=np.float32)
+            for i, cand_sparse in enumerate(c_sparse):
+                sims[i] = float(self.model._compute_sparse_scores(q_sparse, cand_sparse))
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if self.mode == "hybrid":
+            q = _l2_normalize(self._encode_dense([query]))
+            c = _l2_normalize(self._encode_dense(flat_variants))
+            dense_sims = (q @ c.T).reshape(-1)
+            q_sparse = self._encode_sparse([query])[0]
+            c_sparse = self._encode_sparse(flat_variants)
+            sparse_sims = np.empty(len(flat_variants), dtype=np.float32)
+            for i, cand_sparse in enumerate(c_sparse):
+                sparse_sims[i] = float(
+                    self.model._compute_sparse_scores(q_sparse, cand_sparse)
+                )
+            sims = (
+                self.hybrid_dense_weight * dense_sims
+                + self.hybrid_sparse_weight * sparse_sims
+            ).astype(np.float32)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        return super().score_cluster_avg(query, variant_groups)
+
+    def encode_cluster_corpus(self, texts: list[str]) -> GteCorpus:
+        if self.mode == "dense":
+            return GteCorpus(mode="dense", dense=_l2_normalize(self._encode_dense(texts)))
+        if self.mode == "sparse":
+            return GteCorpus(mode="sparse", token_weights=self._encode_sparse(texts))
+        if self.mode == "hybrid":
+            return GteCorpus(
+                mode="hybrid",
+                dense=_l2_normalize(self._encode_dense(texts)),
+                token_weights=self._encode_sparse(texts),
+                hybrid_dense_weight=self.hybrid_dense_weight,
+                hybrid_sparse_weight=self.hybrid_sparse_weight,
+            )
+        raise ValueError(f"unsupported GTE corpus mode: {self.mode}")
+
+    def score_cluster_avg_corpus(
+        self, query: str, group_sizes: list[int], corpus: GteCorpus
+    ) -> np.ndarray:
+        if corpus.mode == "dense":
+            q = _l2_normalize(self._encode_dense([query]))
+            sims = (q @ corpus.dense.T).reshape(-1)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if corpus.mode == "sparse":
+            q_sparse = self._encode_sparse([query])[0]
+            sims = self._sparse_pair_sims(q_sparse, corpus.token_weights)
+            return _mean_grouped_sims(sims, group_sizes)
+
+        if corpus.mode == "hybrid":
+            q = _l2_normalize(self._encode_dense([query]))
+            dense_sims = (q @ corpus.dense.T).reshape(-1)
+            q_sparse = self._encode_sparse([query])[0]
+            sims = (corpus.hybrid_dense_weight * dense_sims).astype(np.float32)
+            sims += corpus.hybrid_sparse_weight * self._sparse_pair_sims(
+                q_sparse, corpus.token_weights
+            )
+            return _mean_grouped_sims(sims, group_sizes)
+
+        raise ValueError(f"unsupported GTE corpus mode: {corpus.mode}")
 
     def close(self) -> None:
         del self.model

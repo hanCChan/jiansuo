@@ -9,11 +9,28 @@ from pathlib import Path
 import numpy as np
 
 
-def load_mode_scores(cache_root: Path, mode_tag_prefix: str, n_queries: int) -> list[np.ndarray]:
-    mode_dirs = sorted(cache_root.glob(f"bge_m3__{mode_tag_prefix}*"))
-    if not mode_dirs:
-        raise FileNotFoundError(f"no cache dir for mode prefix {mode_tag_prefix}")
-    mode_dir = mode_dirs[0]
+def _resolve_mode_dir(cache_root: Path, mode: str) -> Path:
+    """Match cache dir exactly; avoid `dense` prefix swallowing `dense+sparse`."""
+    token = mode.replace("+", "_plus_")
+    exact = sorted(cache_root.glob(f"bge_m3__{mode}__*"))
+    if exact:
+        return exact[0]
+    escaped = sorted(cache_root.glob(f"bge_m3__{token}__*"))
+    if escaped:
+        return escaped[0]
+    # Legacy fallback: pick shortest matching dirname after alias prefix.
+    candidates = [
+        p
+        for p in cache_root.glob("bge_m3__*")
+        if p.name.startswith(f"bge_m3__{mode}__")
+    ]
+    if not candidates:
+        raise FileNotFoundError(f"no cache dir for mode {mode}")
+    return sorted(candidates, key=lambda p: len(p.name))[0]
+
+
+def load_mode_scores(cache_root: Path, mode: str, n_queries: int) -> list[np.ndarray]:
+    mode_dir = _resolve_mode_dir(cache_root, mode)
     scores = []
     for i in range(n_queries):
         path = mode_dir / f"{i:04d}.npy"

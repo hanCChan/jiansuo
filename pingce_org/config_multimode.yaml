@@ -8,9 +8,6 @@
 #   ./run_eval_multimode_4gpu.sh --no-cache
 #   ./run_eval.sh --config config_multimode.yaml --models bge_m3 --modes sparse --max-queries 2
 
-paths:
-  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
-
 embedding:
   device: "cuda"
   batch_size: 64

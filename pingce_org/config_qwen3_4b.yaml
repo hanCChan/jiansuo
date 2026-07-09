@@ -4,9 +4,6 @@
 #   ./run_eval_qwen3_4b.sh
 #   ./run_eval_qwen3_4b.sh --no-cache
 
-paths:
-  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
-
 embedding:
   device: "cuda"
   batch_size: 32

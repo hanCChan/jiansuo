@@ -5,9 +5,6 @@
 #   ./run_eval.sh --config config_gte.yaml --models gte_multilingual_base
 #   ./run_eval_gte.sh --no-cache
 
-paths:
-  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
-
 embedding:
   device: "cuda"
   batch_size: 64

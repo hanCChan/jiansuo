@@ -1,0 +1,57 @@
+# Cluster-avg multi-mode benchmark: BGE-M3 + GTE on MSA eval + qa_msa.json
+#
+# Usage:
+#   ./run_eval_cluster_multimode_msa.sh
+#   ./run_eval_cluster_multimode_msa.sh --no-cache
+
+embedding:
+  device: "cuda"
+  batch_size: 64
+
+eval:
+  input_json: "../results/full_run/cluster_retrieval_intent_eval_msa_full.json"
+  device: "cuda:0"
+  batch_size: 64
+  report_dir: "./output/reports"
+
+  cluster:
+    qa_json: "./qa_msa.json"
+    report_file: "intent_retrieval_cluster_eval_msa_multimode.json"
+    cache_dir: "./output/reports/score_cache_cluster_msa_multimode"
+
+  models:
+    bge_m3:
+      path: "/data1/hcc/jiansuo/model/bge-m3"
+      backend: bge_m3
+      use_fp16: true
+      max_length: 8192
+      pair_batch_size: 64
+      hybrid_weights: [0.4, 0.2, 0.4]
+      cluster_score_workers: 64
+      modes: [dense, sparse, colbert, hybrid, dense+sparse]
+
+    gte_multilingual_base:
+      path: "/new_nfs/models/gte-multilingual-base"
+      backend: gte
+      use_fp16: true
+      max_length: 8192
+      hybrid_dense_weight: 1.0
+      hybrid_sparse_weight: 0.3
+      modes: [dense, sparse, hybrid]
+
+  gpu_plan:
+    - gpu: 4
+      model: bge_m3
+      modes: [dense, sparse]
+    - gpu: 5
+      model: bge_m3
+      modes: [colbert]
+    - gpu: 6
+      model: bge_m3
+      modes: [hybrid]
+    - gpu: 7
+      model: bge_m3
+      modes: [dense+sparse]
+    - gpu: 2
+      model: gte_multilingual_base
+      modes: [dense, sparse, hybrid]

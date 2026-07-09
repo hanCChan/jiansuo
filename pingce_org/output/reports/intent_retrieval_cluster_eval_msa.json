@@ -1,0 +1,2835 @@
+{
+  "eval_set": "/data1/hcc/jiansuo/pingce_org/../results/full_run/cluster_retrieval_intent_eval_msa_full.json",
+  "num_queries": 37,
+  "default_device": "cuda:0",
+  "batch_size": 64,
+  "score_cache_dir": "/data1/hcc/jiansuo/pingce_org/output/reports/score_cache_cluster_msa",
+  "metrics_doc": {
+    "recall@1": "fraction of positive samples whose avg-score rank is <= 1",
+    "recall@3": "fraction of positive samples whose avg-score rank is <= 3",
+    "recall@5": "fraction of positive samples whose avg-score rank is <= 5"
+  },
+  "mode_doc": {},
+  "models": {
+    "bge_m3": {
+      "path": "/data1/hcc/jiansuo/model/bge-m3",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 4.89,
+          "eval_sec": 355.47,
+          "score_cache_tag": "bge_m3__dense__d4eeed516333",
+          "summary": {
+            "recall@1": 0.40540540540540543,
+            "recall@3": 0.7567567567567568,
+            "recall@5": 0.918918918918919
+          },
+          "per_query": [
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "arabic_english_bge_m3": {
+      "path": "/data1/hcc/jiansuo/model/arabic-english-bge-m3",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 0.54,
+          "eval_sec": 514.82,
+          "score_cache_tag": "arabic_english_bge_m3__dense__896282cefcce",
+          "summary": {
+            "recall@1": 0.40540540540540543,
+            "recall@3": 0.7567567567567568,
+            "recall@5": 0.918918918918919
+          },
+          "per_query": [
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "gte_multilingual_base": {
+      "path": "/new_nfs/models/gte-multilingual-base",
+      "backend": "gte",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 1.07,
+          "eval_sec": 315.73,
+          "score_cache_tag": "gte_multilingual_base__dense__119109bab753",
+          "summary": {
+            "recall@1": 0.2972972972972973,
+            "recall@3": 0.6216216216216216,
+            "recall@5": 0.7837837837837838
+          },
+          "per_query": [
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "multilingual_e5_large_instruct": {
+      "path": "/data1/hcc/jiansuo/model/multilingual-e5-large-instruct",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 2.04,
+          "eval_sec": 352.91,
+          "score_cache_tag": "multilingual_e5_large_instruct__dense__15d14d580d1e",
+          "summary": {
+            "recall@1": 0.5405405405405406,
+            "recall@3": 0.918918918918919,
+            "recall@5": 0.9459459459459459
+          },
+          "per_query": [
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "snowflake_arctic_l_v2": {
+      "path": "/data1/hcc/jiansuo/model/snowflake-arctic-embed-l-v2.0",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 3.67,
+          "eval_sec": 508.14,
+          "score_cache_tag": "snowflake_arctic_l_v2__dense__2fbb363337e9",
+          "summary": {
+            "recall@1": 0.4594594594594595,
+            "recall@3": 0.7567567567567568,
+            "recall@5": 0.918918918918919
+          },
+          "per_query": [
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "gate_arabert_v1": {
+      "path": "/data1/hcc/jiansuo/model/GATE-AraBert-v1",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 1.34,
+          "eval_sec": 160.55,
+          "score_cache_tag": "gate_arabert_v1__dense__4a806ae92414",
+          "summary": {
+            "recall@1": 0.43243243243243246,
+            "recall@3": 0.7567567567567568,
+            "recall@5": 0.8648648648648649
+          },
+          "per_query": [
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "arabic_triplet_matryoshka_v2": {
+      "path": "/data1/hcc/jiansuo/model/Arabic-Triplet-Matryoshka-V2",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 0.33,
+          "eval_sec": 389.18,
+          "score_cache_tag": "arabic_triplet_matryoshka_v2__dense__2064f41220cb",
+          "summary": {
+            "recall@1": 0.4594594594594595,
+            "recall@3": 0.8108108108108109,
+            "recall@5": 0.8378378378378378
+          },
+          "per_query": [
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "embeddinggemma_300m": {
+      "path": "/data1/hcc/jiansuo/model/embeddinggemma-300m",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 2.07,
+          "eval_sec": 1036.84,
+          "score_cache_tag": "embeddinggemma_300m__dense__fe40d07cb571",
+          "summary": {
+            "recall@1": 0.40540540540540543,
+            "recall@3": 0.7027027027027027,
+            "recall@5": 0.8108108108108109
+          },
+          "per_query": [
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "qwen3_embedding_0_6b": {
+      "path": "/data1/hcc/jiansuo/model/Qwen3-Embedding-0.6B",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 1.92,
+          "eval_sec": 854.84,
+          "score_cache_tag": "qwen3_embedding_0_6b__dense__50fc709d2fa7",
+          "summary": {
+            "recall@1": 0.5405405405405406,
+            "recall@3": 0.6216216216216216,
+            "recall@5": 0.7837837837837838
+          },
+          "per_query": [
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    },
+    "qwen3_embedding_4b": {
+      "path": "/new_nfs/models/Qwen__Qwen3-Embedding-4B",
+      "backend": "dense",
+      "device": "cuda:0",
+      "configured_modes": [
+        "dense"
+      ],
+      "modes": {
+        "dense": {
+          "mode": "dense",
+          "load_sec": 7.22,
+          "eval_sec": 2230.9,
+          "score_cache_tag": "qwen3_embedding_4b__dense__c0dfbf25325f",
+          "summary": {
+            "recall@1": 0.4594594594594595,
+            "recall@3": 0.7027027027027027,
+            "recall@5": 0.8648648648648649
+          },
+          "per_query": [
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 0,
+              "query": "كيف يمكن فك حظر تسجيل الدخول إلى myBCA بسبب إدخال كلمة المرور أو BCA ID بشكل متكرر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 1,
+              "query": "كيفية فك حظر واستعادة الوصول إلى myBCA في حالة نسيان BCA ID أو كلمة المرور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 2,
+              "query": "كيفية فك حظر PIN معاملة myBCA أو BCA Mobile التي تم حظرها بسبب إدخال PIN بشكل خاطئ؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 3,
+              "query": "كيفية حل مشكلة عدم وصول رمز OTP myBCA أو BCA Mobile؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 4,
+              "query": "كيفية حل مشكلة فشل التحقق من الوجه أو Face ID myBCA بعد تغيير الهاتف المحمول؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 5,
+              "query": "كيفية تغيير رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 6,
+              "query": "كيفية فك حظر رقم الهاتف المحمول المسجل في خدمة e-banking BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 7,
+              "query": "كيفية تفعيل الخدمات المالية في تطبيق BCA Mobile أو myBCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 8,
+              "query": "كيفية التسجيل وتفعيل حساب mobile banking BCA لأول مرة؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 9,
+              "query": "كيفية فك حظر تسجيل الدخول KlikBCA Individual المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 10,
+              "query": "كيفية حل مشكلة keyBCA الذي يعرض failed؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 11,
+              "query": "كيف يمكن فك حظر بطاقة ATM أو بطاقة الخصم BCA التي تم حظرها بسبب إدخال PIN خاطئ؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 12,
+              "query": "ماذا يجب أن أفعل إذا ابتلعت بطاقة ATM أو علقت في آلة ATM؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 13,
+              "query": "لماذا تم تحويل الأموال من حساب BCA بنجاح وتم خصم الرصيد لكن المستلم لم يستلم الأموال بعد؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 14,
+              "query": "كيف يمكن الإبلاغ عن أموال تحويل دخلت بالخطأ إلى حساب آخر؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 15,
+              "query": "كيف يمكن الإبلاغ عن معاملة غير معروفة أو انخفاض رصيد الحساب دون علم؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 16,
+              "query": "كيف يمكن إعادة تفعيل حساب التوفير BCA غير النشط؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 17,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد المؤقت على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 18,
+              "query": "كيف يمكن التقدم بطلب لزيادة الحد الدائم لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 19,
+              "query": "كيف يمكن التقدم بطلب للإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 20,
+              "query": "لماذا تم رفض طلب الإعفاء من الرسم السنوي لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 21,
+              "query": "كيف يمكن تحويل معاملة بطاقة الائتمان BCA إلى أقساط؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 22,
+              "query": "كيف يمكن إغلاق بطاقة الائتمان BCA التي لم تعد مستخدمة؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 23,
+              "query": "كيف يمكن التقدم بطلب للحصول على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 24,
+              "query": "كيف يمكن تغيير email المسجل على بطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 25,
+              "query": "كيف يمكن تغيير email المسجل في تطبيق myBCA أو خدمة الخدمات المصرفية الإلكترونية BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 26,
+              "query": "كيف يمكن التحقق من معاملة QRIS BCA التي لم تُحتسب أو لم تظهر في السجل؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 27,
+              "query": "ما هي ساعات عمل فرع BCA؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 28,
+              "query": "هل يمكن إجراء خدمة BCA في جميع الفروع؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 1.0,
+              "cluster_id": 29,
+              "query": "كيف يمكن التحقق من حالة تقرير الشكوى أو الشكوى التي تم تقديمها إلى BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 30,
+              "query": "كيف يمكن استبدال بطاقة ATM BCA التي انتهت صلاحيتها؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 0.0,
+              "recall@5": 0.0,
+              "cluster_id": 31,
+              "query": "كيف يمكن تجميد حساب BCA الخاص بالمحتال المشتبه في قيامه بالاحتيال؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 32,
+              "query": "كيف يمكن فك حظر تطبيق Halo BCA المحظور؟"
+            },
+            {
+              "recall@1": 0.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 33,
+              "query": "كيف يمكن حل مشكلة نسيان معرف المستخدم أو كلمة المرور لتسجيل الدخول KlikBCA Individual؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 34,
+              "query": "كيف يمكن التحقق من نقاط المكافآت لبطاقة الائتمان BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 35,
+              "query": "كيف يمكن إجراء السحب النقدي بدون بطاقة في آلة ATM BCA؟"
+            },
+            {
+              "recall@1": 1.0,
+              "recall@3": 1.0,
+              "recall@5": 1.0,
+              "cluster_id": 36,
+              "query": "كيف يمكن تفعيل بطاقة الائتمان BCA الجديدة أو المجددة؟"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

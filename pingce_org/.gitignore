@@ -1,6 +1,7 @@
-# Runtime caches and logs (reproducible from scripts)
-output/reports/score_cache/
-output/reports/score_cache_multimode/
+# Runtime artifacts (reproducible from scripts)
+output/reports/score_cache*/
 output/reports/logs/
 output/reports/smoke_*.json
 output/reports/partial_*.json
+output/reports/bge_*_diag.json
+output/reports/bge_mode_top10_check.json

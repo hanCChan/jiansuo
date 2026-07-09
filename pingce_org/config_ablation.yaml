@@ -6,9 +6,6 @@
 #   GPU6 -> BGE-M3 hybrid weight grid (6)
 #   GPU7 -> GTE hybrid sparse weight grid (5)
 
-paths:
-  cluster_retrieval_eval_json: "./cluster_retrieval_intent_eval.json"
-
 embedding:
   device: "cuda"
   batch_size: 64

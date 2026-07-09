@@ -2,8 +2,8 @@
 # Intent retrieval benchmark with cluster-averaged candidate scores
 #
 # Each candidate FAQ score = mean(query vs [Question] + 5x Question_cluster from qa.json)
-# Input:  config eval.input_json -> output/cluster_retrieval_intent_eval.json
-# QA:     config eval.cluster.qa_json -> output/qa.json
+# Input:  config eval.input_json (MSA full eval)
+# QA:     config eval.cluster.qa_json -> qa_msa.json
 # Output: output/reports/intent_retrieval_cluster_eval.json
 #
 # Extra args are forwarded, e.g.:
@@ -15,8 +15,9 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-export PYTHONPATH="${PYTHONPATH:-}:$(pwd)/src:$(pwd)/../faq_eval/src"
+export PYTHONPATH="${PYTHONPATH:-}:$(pwd)/src"
+source /data1/hcc/jiansuo/setup_conda.sh
 
 python src/eval_intent_retrieval_cluster.py \
-  --models bge_m3 gte qwen3_4b \
+  --config config_cluster_msa.yaml \
   "$@"

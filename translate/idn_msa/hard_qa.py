@@ -6,6 +6,7 @@ from typing import Any
 
 from .config_loader import PipelineConfig, load_triage_config
 from .expand import TranslationItem
+from .mask import trigger_matches
 from .unicode_norm import normalize_for_embedding, normalize_unicode
 
 ARABIC_RE = re.compile(
@@ -18,6 +19,7 @@ LATIN_RE = re.compile(r"[A-Za-z]+")
 CJK_RE = re.compile(r"[\u4E00-\u9FFF]")
 PLACEHOLDER_RE = re.compile(r"<ENT_\d{2}>")
 KIMI_PLACEHOLDER_RE = re.compile(r"<ENT[^>]*>", re.IGNORECASE)
+SENSITIVE_XXX_RE = re.compile(r"\b[A-Z0-9]*X{2,}[A-Z0-9]*\b", re.IGNORECASE)
 
 
 def _latin_tokens(text: str) -> list[str]:
@@ -62,6 +64,25 @@ def _is_whitelisted_latin(
     return any(low in w.lower() or w.lower() in low for w in cfg.latin_whitelist)
 
 
+def _sensitive_placeholder_chars(text: str) -> int:
+    return sum(len(match.group(0)) for match in SENSITIVE_XXX_RE.finditer(text))
+
+
+def _count_sensitive_placeholders(text: str) -> int:
+    return len(SENSITIVE_XXX_RE.findall(text))
+
+
+def _min_arabic_ratio(source_text: str) -> float:
+    xxx_count = _count_sensitive_placeholders(source_text)
+    if xxx_count >= 4:
+        return 0.20
+    if xxx_count >= 2:
+        return 0.25
+    if xxx_count >= 1:
+        return 0.35
+    return 0.55
+
+
 def _arabic_ratio(text: str, cfg: PipelineConfig, source_allowlist: set[str]) -> float:
     if not text:
         return 0.0
@@ -71,7 +92,8 @@ def _arabic_ratio(text: str, cfg: PipelineConfig, source_allowlist: set[str]) ->
     whitelisted_latin_chars = sum(
         len(tok) for tok in latin_tokens if _is_whitelisted_latin(tok, cfg, source_allowlist)
     )
-    denom = max(len(text) - whitelisted_latin_chars, 1)
+    placeholder_chars = _sensitive_placeholder_chars(text)
+    denom = max(len(text) - whitelisted_latin_chars - placeholder_chars, 1)
     return arabic_chars / denom
 
 
@@ -92,6 +114,9 @@ def _contains_forbidden_phrase(text: str, forbidden: str) -> bool:
     if forbidden in ("تفعيل", "تنشيط"):
         for phrase in ("إلغاء تفعيل", "إيقاف التفعيل"):
             if phrase in text:
+                return False
+        for phrase in ("لا يمكن تفعيل", "لا يمكن تنشيط", "لم يتم تفعيل", "غير مفعل", "لا يُفعّل"):
+            if phrase in text and forbidden in phrase:
                 return False
     return True
 
@@ -126,8 +151,18 @@ def _is_entity_drift(
     return True
 
 
+_TRIAGE_CACHE: dict[str, Any] | None = None
+
+
+def _get_triage_config(cfg: PipelineConfig) -> dict[str, Any]:
+    global _TRIAGE_CACHE
+    if _TRIAGE_CACHE is None:
+        _TRIAGE_CACHE = load_triage_config(cfg.config_dir)
+    return _TRIAGE_CACHE
+
+
 def _entity_satisfied_by_translation(entity: str, text: str, cfg: PipelineConfig) -> bool:
-    triage = load_triage_config(cfg.config_dir)
+    triage = _get_triage_config(cfg)
     translatable = set(triage.get("translatable_entities", []))
     if entity not in translatable:
         return False
@@ -136,11 +171,35 @@ def _entity_satisfied_by_translation(entity: str, text: str, cfg: PipelineConfig
     return any(alias.lower() in lower_text for alias in aliases)
 
 
+def _normalize_source_text(text: str) -> str:
+    return re.sub(r"\s+", " ", text.lower()).strip()
+
+
+def _has_block_action_in_source(text: str) -> bool:
+    lower = _normalize_source_text(text)
+    return any(p in lower for p in ("terblokir", "terblok", "diblokir", "terblokirnya", "memblokir"))
+
+
+def _has_unblock_action_in_source(text: str) -> bool:
+    lower = _normalize_source_text(text)
+    patterns = (
+        "membuka blokir",
+        "buka blokir",
+        "bukakan blokir",
+        "pembukaan blokir",
+        "bukakan pemblokiran",
+        "pembukaan pemblokiran",
+        "buka setengah blokir",
+        "bukakan setengah blokir",
+        "bukakan dulu setengah blokir",
+    )
+    return any(p in lower for p in patterns)
+
+
 def _dual_block_unblock_source(item: TranslationItem) -> bool:
-    lower = item.source_idn.lower()
-    blocked = any(p in lower for p in ("terblokir", "terblok", "diblokir", "blokir"))
-    unblocked = any(p in lower for p in ("membuka blokir", "buka blokir", "pembukaan blokir"))
-    return blocked and unblocked
+    return _has_block_action_in_source(item.source_idn) and _has_unblock_action_in_source(
+        item.source_idn
+    )
 
 
 def _has_unblock_phrase(text: str) -> bool:
@@ -208,7 +267,8 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
         and token.lower() in {w.lower() for w in cfg.residue_words}
     ]
 
-    if ratio < 0.55:
+    min_ratio = _min_arabic_ratio(item.source_idn)
+    if ratio < min_ratio:
         product_only_latin = latin_tokens and all(
             _is_whitelisted_latin(token, cfg, source_allowlist) for token in latin_tokens
         )
@@ -217,6 +277,8 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
             warnings.append(f"arabic_ratio_low_but_product_heavy:{ratio:.3f}")
         else:
             errors.append(f"arabic_ratio_too_low:{ratio:.3f}")
+    elif min_ratio < 0.55:
+        warnings.append(f"arabic_ratio_xxx_relaxed:{ratio:.3f}>={min_ratio:.2f}")
 
     for token in latin_tokens:
         if _is_whitelisted_latin(token, cfg, source_allowlist):
@@ -256,7 +318,7 @@ def hard_qa_item(item: TranslationItem, cfg: PipelineConfig) -> dict[str, Any]:
     lower_src = item.source_idn.lower()
     lower_tgt = text.lower()
     for term_name, spec in cfg.glossary.get("terms", {}).items():
-        triggered = any(t.lower() in lower_src for t in spec.get("id_triggers", []))
+        triggered = any(trigger_matches(item.source_idn, t) for t in spec.get("id_triggers", []))
         if not triggered:
             continue
         expected = [e.lower() for e in spec.get("ar_expected", [])]

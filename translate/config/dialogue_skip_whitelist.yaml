@@ -1,0 +1,103 @@
+# Exact-match Indonesian dialogue tokens copied verbatim to content_msa (no Kimi).
+# Extend this list when QA/debug shows more filler or non-semantic turns.
+
+exact_skip:
+  # System / filler sounds
+  - TUT
+  - TU
+  - TUH
+  # Interjections / backchannels
+  - IYA
+  - IYA?
+  - YA
+  - OKE
+  - OKEY
+  - OK
+  - OH
+  - OHHH
+  - EEH
+  - HEE
+  - HEEH
+  - HMM
+  - HOO
+  - LHO
+  - NIH
+  - GITU
+  - EEH
+  - ENGGAK
+  - NGGA
+  - GA
+  - GA?
+  - BAIK
+  - HALO
+  - HELLO
+  # Very short agent/customer cues (no standalone semantic content)
+  - PAK
+  - BU
+  - MBAK
+  - MAS
+  - IBU
+  - BANG
+  - SAYA
+  - INI
+  - ITU
+  - ADA
+  - APA
+  - SAMA
+  - LAGI
+  - LALU
+  - TADI
+  - UDAH
+  - JADI
+  - MASI
+  - LUPA
+  - BISA
+  - PAGI
+  - MALAM
+  - SORE
+  - SIANG
+  - TERIMA KASIH
+  - MAKASIH
+  - SAMA SAMA
+  - SAMA-SAMA
+  # Product / brand tokens (short entity-only turns)
+  - BCA
+  - BCA ID
+  - BCA MOBILE
+  - BCA MYBCA
+  - BCA, BCA MOBILE
+  - MY BCA
+  - MYBCA
+  - MYBCA MYBCA
+  - MBCA
+  - M-BCA
+  - M BANKING
+  - M BANKING BCA
+  - M BCA MY BCA MYBCA
+  - MYBCA SAMA BCA MOBILE
+  - MY BCA SAMA BCA MOBILE YA
+  - BI FAST
+  - QRIS
+  - DI MY BCA
+  - KAI AKSES
+  - TAHAPAN TAHAPAN
+  - TELL TO
+  - WSID Z3HX
+  - '[Email]'
+  - '[Email] CO [Email] ID'
+  - '[Email] CO [Email] ID OKE'
+  - PSTN XXX XXX XXX
+  - MY BCA ATAU BCA MOBILE
+  - 1X
+  - 2X
+  - 3X
+  - 9X
+
+# Regex patterns (full string match, case-insensitive) -> copy verbatim
+pattern_skip:
+  # Pure placeholder tokens like XX / XXX / 0XXX (no translation needed)
+  - '^[0-9]*X{2,}[0-9]*$'
+  # Masked/redacted spans
+  - '^\*+$'
+  # Bracketed system tokens like [Email]
+  - '^\[[^\]]+\](?:\s+[A-Z]{1,4}\s+\[[^\]]+\](?:\s+[A-Z]{1,4})?)?$'

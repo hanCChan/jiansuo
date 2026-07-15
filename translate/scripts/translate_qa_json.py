@@ -70,6 +70,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--max-items", type=int, default=0, help="Debug: cap untranslated items")
     p.add_argument("--resume", action="store_true")
     p.add_argument("--assemble-only", action="store_true", help="Only build output from cache")
+    p.add_argument(
+        "--best-effort-finish",
+        action="store_true",
+        help="Backfill remaining cache entries from latest debug msa_raw, then write output",
+    )
     p.add_argument("--log-level", default="INFO")
     return p.parse_args()
 
@@ -200,6 +205,39 @@ def assemble_qa_msa(rows: list[dict], cache: TranslationCache) -> tuple[list[dic
     return out_rows, missing
 
 
+def load_latest_debug_msa(debug_path: Path) -> dict[str, str]:
+    latest: dict[str, str] = {}
+    if not debug_path.exists():
+        return latest
+    with debug_path.open(encoding="utf-8") as f:
+        for line in f:
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            msa = row.get("msa_raw")
+            src = row.get("source_idn")
+            if src and msa:
+                latest[src] = msa
+    return latest
+
+
+def backfill_best_effort(
+    cache: TranslationCache,
+    pending: list[str],
+    debug_path: Path,
+) -> int:
+    latest = load_latest_debug_msa(debug_path)
+    added = 0
+    for src in pending:
+        if cache.get(src):
+            continue
+        msa = latest.get(src)
+        if msa:
+            cache.set(src, msa)
+            added += 1
+    return added
+
+
 def main() -> None:
     args = parse_args()
     logging.basicConfig(
@@ -287,6 +325,11 @@ def main() -> None:
 
         cache.save(args.cache)
 
+    if args.best_effort_finish and pending:
+        added = backfill_best_effort(cache, pending, args.debug)
+        logging.info("Best-effort backfill from debug: %s/%s pending", added, len(pending))
+        cache.save(args.cache)
+
     out_rows, missing = assemble_qa_msa(rows, cache)
     if missing:
         unique_missing = len(set(missing))
@@ -296,22 +339,19 @@ def main() -> None:
             len(rows),
             unique_missing,
         )
+        summary = {
+            "input_rows": len(rows),
+            "output_rows": len(out_rows),
+            "missing_unique_strings": unique_missing,
+            "cache_entries": len(cache),
+            "best_effort_finish": bool(args.best_effort_finish),
+        }
         summary_path = args.output.with_suffix(".summary.json")
         summary_path.write_text(
-            json.dumps(
-                {
-                    "input_rows": len(rows),
-                    "output_rows": len(out_rows),
-                    "missing_unique_strings": unique_missing,
-                    "cache_entries": len(cache),
-                },
-                ensure_ascii=False,
-                indent=2,
-            )
-            + "\n",
+            json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
-        if len(out_rows) < len(rows):
+        if len(out_rows) < len(rows) and not args.best_effort_finish:
             raise SystemExit(
                 f"Translation incomplete ({len(out_rows)}/{len(rows)} rows). "
                 f"Re-run with --resume after checking {args.debug}"

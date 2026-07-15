@@ -45,12 +45,19 @@ def restore_text(text: str, cfg: PipelineConfig) -> str:
     return restored
 
 
-def extract_terms(text: str, cfg: PipelineConfig) -> list[str]:
+def trigger_matches(text: str, trigger: str) -> bool:
     lower = text.lower()
+    trig = trigger.lower()
+    if len(trig) <= 4 or trig.isupper():
+        return re.search(rf"(?<![a-z]){re.escape(trig)}(?![a-z])", lower) is not None
+    return trig in lower
+
+
+def extract_terms(text: str, cfg: PipelineConfig) -> list[str]:
     found: list[str] = []
     for term_name, spec in cfg.glossary.get("terms", {}).items():
         for trigger in spec.get("id_triggers", []):
-            if trigger.lower() in lower:
+            if trigger_matches(text, trigger):
                 found.append(term_name)
                 break
     return found

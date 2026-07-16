@@ -1,0 +1,15 @@
+{
+  "turns_with_xxx": 849,
+  "filled_accepted_or_warning": 789,
+  "status_counts": {
+    "accepted": 749,
+    "warning": 40,
+    "failed": 58,
+    "skipped": 0
+  },
+  "remaining_xxx": 0,
+  "pii_like_generated": 8,
+  "clusters_cached": 492,
+  "input": "/data1/hcc/jiansuo/dh/dialogue_20260615_BCA_clean_test_msa.json",
+  "output": "/data1/hcc/jiansuo/dh/dialogue_20260615_BCA_clean_test_msa_xxx_filled.json"
+}
